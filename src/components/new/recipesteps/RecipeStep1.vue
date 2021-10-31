@@ -92,7 +92,6 @@
                 </v-container>
             </div>
         </v-form>
-        <v-btn color="success" @click="log">text</v-btn>
     </v-container>
 </template>
 
@@ -124,33 +123,12 @@ export default {
         newAuthorDialog:false,
         newYieldTypeDialog:false,
         newCategoryDialog:false,
-        // name: "",
-        // nameRules: [v => !!v || "Name is required", v => (v && v.length <= 10) || "Name must be less than 10 characters"],
-        // select: null,
-        // checkbox: false,
-        // title:'',
-        // yield_type:'',
-        // yield_amount:0,
-        // author:'',
-        // category:{},
-        
     }),
     computed: {
     },
     watch:{
-        
-        // author_list: {
-        //     deep: true
-        // },
-        // title(val){
-        //     this.$store.state.recipe.title = val
-        //     console.log(this.$store.state.recipe.title)
-        // }
     },
     methods: {
-        log(){
-            console.log(this.$store.state.recipe.title)
-        },
         closeDialog(){
             this.loadAuthors()
             this.newAuthorDialog=false
@@ -163,20 +141,8 @@ export default {
             this.loadYieldTypes()
             this.newYieldTypeDialog=false
         },
-        // submit() {
-        //     if (this.$refs.form.validate()) {
-        //         // Native form submission is not yet supported
-        //         axios.post("/api/submit", {
-        //             name: this.name,
-        //             select: this.select,
-        //             checkbox: this.checkbox
-        //         });
-        //     }
-        // },
         clear() {
             this.$refs.form.reset();
-        },
-        newAuthor(){
         },
         loadAuthors(){
             this.axios.get('authors')
@@ -184,7 +150,6 @@ export default {
                     this.author_list = r.data.map(a=>{
                         return {text:a.name, value:a.id, ...a}
                     })
-                    console.table(this.author_list)
                 })
         },
         loadYieldTypes(){
@@ -205,7 +170,6 @@ export default {
         }
     },
     created() {
-        console.log(this.getRecipe)
         this.loadAuthors()
         this.loadYieldTypes()
         this.loadCategories()

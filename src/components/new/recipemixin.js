@@ -47,6 +47,18 @@ export default {
             get(){return this.getRecipe.prep_time},
             set(value){this.$store.commit('setRecipeProp',{value,prop:'prep_time'})}
         },
+        steps:{
+            get(){return this.getStepperSteps},
+            set(value){this.$store.commit('setStepperSteps',value)}
+        }, 
+        titles:{
+                get(){return this.getStepperTitles},
+                set(value){this.$store.commit('setStepperTitles',value)}
+        },
+        e1:{
+                get(){return this.getStepperActualStep},
+                set(value){this.$store.commit('setStepperActualStep',value)}
+        },
         ...mapGetters([
             'getRecipe',
             'getCategory',

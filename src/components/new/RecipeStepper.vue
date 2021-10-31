@@ -15,15 +15,17 @@
                       <v-card dark class="mb-12">
                           <component :is="`recipe-step-${n}`" :ref="`step${n}`"></component>
                       </v-card>
-                      <v-btn color="primary" @click="nextStep(n)">
-                          Continue
-                      </v-btn>
-                      <v-btn text>
-                          Cancel
-                      </v-btn>
-                      <v-btn text @click="save">
-                          Save
-                      </v-btn>
+                      <div class="d-flex justify-space-between">
+                        <v-btn color="warning">
+                            Cancelar
+                        </v-btn>
+                        <v-btn v-if="n==4" color="success" @click="save" :disabled="notFilled">
+                            Salvar
+                        </v-btn>
+                        <v-btn v-else color="primary" @click="nextStep(n)">
+                            Continuar
+                        </v-btn>
+                      </div>
                   </v-stepper-content>
               </v-stepper-items>
           </v-stepper>
@@ -37,7 +39,9 @@ import RecipeStep2 from './recipesteps/RecipeStep2.vue'
 import RecipeStep3 from './recipesteps/RecipeStep3.vue'
 import RecipeStep4 from './recipesteps/RecipeStep4.vue'
 import { mapGetters } from 'vuex'
+import RecipeMixin from './recipemixin'
 export default {
+  mixins: [RecipeMixin],
   components: { RecipeStep1, RecipeStep2, RecipeStep3, RecipeStep4 },
     data () {
       return {
@@ -49,7 +53,6 @@ export default {
         //           'Review']
       }
     },
-
     watch: {
       steps (val) {
         if (this.e1 > val) {
@@ -59,18 +62,34 @@ export default {
     },
 
     computed: {
-      steps:{
-            get(){return this.getStepperSteps},
-            set(value){this.$store.commit('setStepperSteps',value)}
-      }, 
-      titles:{
-            get(){return this.getStepperTitles},
-            set(value){this.$store.commit('setStepperTitles',value)}
+      notFilled(){
+        
+        let recipeNotFilled = !(!!this.getRecipe.title &&
+                 !!this.getRecipe.prep_time &&
+                 !!this.getRecipe.yield_amount &&
+                 !!this.getRecipe.yield_type_id &&
+                 !!this.getRecipe.instructions)
+        
+        let ingredientListNotFilled = this.getIngredientList.length == 0
+
+        let categoryNotFilled = !this.getCategory.id
+
+        let authorNotFilled = !this.getAuthor.id
+
+        console.log('falsies Recipe,IngredientList,Category,Author',
+          recipeNotFilled, 
+          ingredientListNotFilled, 
+          categoryNotFilled, 
+          authorNotFilled)
+
+        return recipeNotFilled || ingredientListNotFilled || categoryNotFilled || authorNotFilled
+        // return !(!!this.getRecipe.title &&
+        //          !!this.getRecipe.prep_time &&
+        //          !!this.getRecipe.yield_amount &&
+        //          !!this.getRecipe.yield_type_id &&
+        //          !!this.getRecipe.instructions)
       },
-      e1:{
-            get(){return this.getStepperActualStep},
-            set(value){this.$store.commit('setStepperActualStep',value)}
-      },
+      
       ...mapGetters([
         'getStepperTitles',
         'getStepperSteps',
@@ -80,9 +99,6 @@ export default {
     methods: {
       nextStep (n) {
         this.$store.state.recipe.yield_type_id=this.$store.state.yield_type.id
-        console.log(this.$store.state.recipe)
-        console.log(this.$store.state.category)
-        console.log(this.$store.state.yield_type)
         if (n === this.steps) {
           this.e1 = 1
         } else {
@@ -93,6 +109,8 @@ export default {
         console.log(this.$refs.step1[0].title)
         console.log(this.$refs.step1[0].author)
       }
+    },
+    created() {
     },
   }
 </script>
