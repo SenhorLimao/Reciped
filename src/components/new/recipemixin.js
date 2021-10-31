@@ -100,6 +100,7 @@ export default {
                 .then(()=>this.saveIngredientList())
                 .then(()=>this.saveCategoryList())
                 .then(()=>this.saveAuthorList())
+                .then(()=>console.log(this.getRecipe))
                 .catch(err=>console.error(err))
         }
     },

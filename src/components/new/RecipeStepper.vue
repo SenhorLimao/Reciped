@@ -19,7 +19,7 @@
                         <v-btn color="warning">
                             Cancelar
                         </v-btn>
-                        <v-btn v-if="n==4" color="success" @click="save" :disabled="notFilled">
+                        <v-btn v-if="n==4" color="success" @click="saveRecipe" :disabled="notFilled">
                             Salvar
                         </v-btn>
                         <v-btn v-else color="primary" @click="nextStep(n)">
