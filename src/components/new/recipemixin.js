@@ -77,7 +77,10 @@ export default {
             this.getIngredientList.forEach(element => {
                 element.recipe_id = this.recipe_id
                 this.axios.post('ingredient_list/save', element)
-                    .then(r=>console.log(r.data))
+                    .then(r => {
+                        console.log('il',r.data)
+                        this.savePrepMethodList(r.data.id, element.prep_method_id)
+                    })
             });
         },
         saveAuthorList(){
@@ -90,9 +93,16 @@ export default {
                 {category_id:this.getCategory.id,recipe_id:this.recipe_id})
                 .then(r=>console.log(r.data))
         },
+        savePrepMethodList(ingredient_list_id, prep_method_id){
+            console.log(ingredient_list_id, prep_method_id)
+            this.axios.post('prep_method_list/save',
+                {prep_method_id,ingredient_list_id})
+                .then(r=>console.log(r.data))
+        },
         saveRecipe(){
             // save recipe
             // save ingredient_list
+            // save prep_method_list
             // save author_list
             // save category_list
             this.axios.post('recipe/save',this.getRecipe)
