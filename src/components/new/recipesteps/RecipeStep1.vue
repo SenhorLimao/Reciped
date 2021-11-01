@@ -37,17 +37,19 @@
                     </v-row>
                     <v-row>
                         <v-col cols="2">
-                            <v-text-field label="Rendimento" v-model="yield_amount" :rules="yieldAmountRules" required
-                                type="number"></v-text-field>
+                            <v-text-field 
+                                label="Rendimento" 
+                                v-model="yield_amount" 
+                                :min="0"
+                                type="number">
+                            </v-text-field>
                         </v-col>
                         <v-col cols="9">
                             <v-select 
                                 label="Unidade de Medida" 
                                 return-object 
                                 v-model="yield_type" 
-                                :items="yield_type_items"
-                                :rules="yieldTypeRules" 
-                                required>
+                                :items="yield_type_items">
                             </v-select>
                         </v-col>
                         <v-col cols="1">
@@ -115,9 +117,9 @@ export default {
         yield_type_items:[],
         author_list:[],
         categories_list:[],
-        titleRules:[v => !!v || "E-mail is required", v => /^w+([.-]?w+)*@w+([.-]?w+)*(.w{2,3})+$/.test(v) || "E-mail must be valid"],
-        yieldAmountRules:[],
-        yieldTypeRules:[],
+        titleRules:[v => !!v || "É necessário fornecer um título para a receita"],
+        // yieldAmountRules:[v=>!!v || "É necessário fornecer um rendimento"],
+        // yieldTypeRules:[],
         authorRules:[],
         categoryRules:[],
         newAuthorDialog:false,
@@ -153,11 +155,13 @@ export default {
                 })
         },
         loadYieldTypes(){
+            this.yield_type=null
             this.axios.get('yield_types')
                 .then(r=>{
                     this.yield_type_items = r.data.map(y=>{
                         return {text:y.name, value:y.id, ...y}
                     })
+                    this.yield_type_items.unshift({text:'Não informado', value:null})
                 })
         },
         loadCategories(){

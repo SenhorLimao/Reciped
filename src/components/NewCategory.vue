@@ -53,8 +53,9 @@
     data: () => ({
       dialog: false,
       name:'',
-      category_father:{},
-      categories_list:{}
+      // category_father:{text:"Nenhuma",value:null},
+      category_father:null,
+      categories_list:[]
     }),
     computed: {
         show:{
@@ -70,12 +71,35 @@
     },
     created() {
         this.dialog=this.open
-        console.table(this.categories)
+        console.table(this.category_father)
         this.categories_list=[{text:"Nenhuma",value:null}, ...this.categories]
     },
     methods: {
         saveAndClose(){
+          // let parent_id=null
+
+
+
+          // if(this.category_father){
+          //   if(typeof(this.category_father.value)=='undefined'){
+          //     parent_id=this.category_father
+          //   }
+          //   else {
+          //     parent_id=this.category_father.value
+          //   }
+          // }
+          // console.log('parent id',parent_id)
             let data = {name:this.name, parent_id:this.category_father}
+
+            // check if category father is an empty object. If so, set parent_id to null
+            // if 0, set parent_id to null
+            // if(this.category_father == null ||
+            //  this.category_father == undefined || 
+            //  this.category_father == "" || 
+            //  this.category_father == 0 ||
+            //  this.category_father == {}){
+            //     data.parent_id = null
+            // }
             console.table(data)
             this.axios.post('category/save',data)
                 .then((result) => {

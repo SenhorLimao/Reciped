@@ -7,7 +7,7 @@
             </template>
             <template #items>
                 <h4>Author: {{getAuthor.name}}</h4>
-                <h4>Rendimento: {{getRecipe.yield_amount}} {{getYieldType.name}}</h4>
+                <h4>Rendimento: {{getYieldType&&getYieldType.value?getRecipe.yield_amount:``}} {{getYieldType&&getYieldType.value?getYieldType.name:`Não informado`}}</h4>
                 <h4>Categoria: {{getCategory.name}}</h4>
             </template>
         </recipe-review-cards>

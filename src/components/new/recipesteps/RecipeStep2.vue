@@ -185,7 +185,7 @@ export default {
 
             ingredients:[],
             ingredient:{},
-            substitute_for:{},
+            substitute_for:null,
             ingredient_groups:[],
             ingredient_group:{},
             prep_methods:[],
@@ -294,7 +294,7 @@ export default {
     },
     computed:{
         substitutes(){
-            return [{text:'Nenhum', value:0, id:0}, ...this.ingredients]
+            return [{text:'Nenhum', value:null, id:null}, ...this.ingredients]
         }
     }
 }
