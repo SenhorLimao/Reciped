@@ -82,6 +82,7 @@
       name_abbrev:'',
       plural:'',
       plural_abbrev:'',
+      unit_id:null
     }),
     computed: {
         show:{
@@ -108,11 +109,11 @@
                 plural_abbrev:this.plural_abbrev,
               })
               .then((result) => {
-                  console.log(result.data)
+                  this.unit_id=result.data.id
               }).catch((err) => {
                   console.error(err)
               })
-              .finally(()=>this.$emit('close'));
+              .finally(()=>this.$emit('close',this.unit_id));
         }
     },
   }

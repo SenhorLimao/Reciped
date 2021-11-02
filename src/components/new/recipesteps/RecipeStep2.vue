@@ -34,7 +34,7 @@
                                 <span>Criar novo Ingrediente</span>
                             </v-tooltip>
                         </v-col>
-                        <new-ingredient :visible="newIngredientDialog" @close="closeIngredientDialog" />
+                        <new-ingredient :visible="newIngredientDialog" @close="closeIngredientDialog($event)" />
                     </v-row>
                     <v-row>
                         <v-col cols="5">
@@ -56,7 +56,7 @@
                             </v-tooltip>
                         </v-col>
 
-                        <new-ingredient-group :visible="newIngredientGroupDialog" @close="closeIngredientGroupDialog" />
+                        <new-ingredient-group :visible="newIngredientGroupDialog" @close="closeIngredientGroupDialog($event)" />
                         
                         <v-col cols="5">
                             <v-autocomplete
@@ -77,7 +77,7 @@
                             </v-tooltip>
                         </v-col>
                         <!-- <v-btn color="accent" large @click.stop="newAuthorDialog=true"></v-btn> -->
-                        <new-prep-method :visible="newPrepMethodDialog" @close="closePrepMethodDialog" />
+                        <new-prep-method :visible="newPrepMethodDialog" @close="closePrepMethodDialog($event)" />
                     </v-row>
                     <v-row>
                         <v-col cols="2">
@@ -115,7 +115,7 @@
                             </v-tooltip>
                         </v-col>
                         <!-- <v-btn color="accent" large @click.stop="newAuthorDialog=true"></v-btn> -->
-                        <new-unit :visible="newUnitDialog" @close="closeUnitDialog" />
+                        <new-unit :visible="newUnitDialog" @close="closeUnitDialog($event)" />
                     </v-row>
                     <v-row>
                         <v-col>
@@ -206,21 +206,25 @@ export default {
         remove(item){
             this.ingredient_list.splice(this.ingredient_list.indexOf(item),1)
         },
-        closeUnitDialog(){
+        closeUnitDialog(unit){
             this.loadUnits()
             this.newUnitDialog=false
+            this.unit=unit
         },
-        closeIngredientDialog(){
+        closeIngredientDialog(ingredient){
             this.loadIngredients()
             this.newIngredientDialog=false
+            this.ingredient=ingredient
         },
-        closeIngredientGroupDialog(){
+        closeIngredientGroupDialog(group){
             this.loadIngredientGroups()
             this.newIngredientGroupDialog=false
+            this.ingredient_group=group
         },
-        closePrepMethodDialog(){
+        closePrepMethodDialog(prep_method){
             this.loadPrepMethods()
             this.newPrepMethodDialog=false
+            this.prep_method=prep_method
         },
         loadUnits(){
             this.axios.get('units')

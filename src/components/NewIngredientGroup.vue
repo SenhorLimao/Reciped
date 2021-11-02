@@ -46,7 +46,8 @@
     props:['visible'],
     data: () => ({
       dialog: false,
-      name:''
+      name:'',
+      group_id:null
     }),
     computed: {
         show:{
@@ -67,11 +68,11 @@
         saveAndClose(){
             this.axios.post('ingredient_group/save',{name:this.name})
                 .then((result) => {
-                    console.log(result.data)
+                    this.group_id=result.data.id
                 }).catch((err) => {
                     console.error(err)
                 })
-                .finally(()=>this.$emit('close'));
+                .finally(()=>this.$emit('close', this.group_id));
         }
     },
   }
