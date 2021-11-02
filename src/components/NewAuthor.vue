@@ -46,7 +46,8 @@
     props:['visible'],
     data: () => ({
       dialog: false,
-      name:''
+      name:'',
+      author_id:null
     }),
     computed: {
         show:{
@@ -67,11 +68,11 @@
         saveAndClose(){
             this.axios.post('author/save',{name:this.name})
                 .then((result) => {
-                    console.log(result.data)
+                    this.author_id=result.data.id
                 }).catch((err) => {
                     console.error(err)
                 })
-                .finally(()=>this.$emit('close'));
+                .finally(()=>this.$emit('close', this.author_id));
         }
     },
   }

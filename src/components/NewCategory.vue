@@ -55,7 +55,8 @@
       name:'',
       // category_father:{text:"Nenhuma",value:null},
       category_father:null,
-      categories_list:[]
+      categories_list:[],
+      cathegory_id:null,
     }),
     computed: {
         show:{
@@ -103,11 +104,11 @@
             console.table(data)
             this.axios.post('category/save',data)
                 .then((result) => {
-                    console.log(result.data)
+                    this.cathegory_id=result.data.id
                 }).catch((err) => {
                     console.error(err)
                 })
-                .finally(()=>this.$emit('close'));
+                .finally(()=>this.$emit('close', this.cathegory_id));
         }
     },
   }

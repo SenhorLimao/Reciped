@@ -98,7 +98,7 @@ export default {
     },
     methods: {
       nextStep (n) {
-        this.$store.state.recipe.yield_type_id=this.$store.state.yield_type.id
+        // this.$store.state.recipe.yield_type_id=this.$store.state.yield_type.id?this.$store.state.yield_type.id:null
         if (n === this.steps) {
           this.e1 = 1
         } else {

@@ -32,7 +32,7 @@
                             </v-tooltip>
                         </v-col>
                         <!-- <v-btn color="accent" large @click.stop="newAuthorDialog=true"></v-btn> -->
-                        <new-author :visible="newAuthorDialog" @close="closeDialog" />
+                        <new-author :visible="newAuthorDialog" @close="closeDialog($event)" />
 
                     </v-row>
                     <v-row>
@@ -64,7 +64,7 @@
                             </v-tooltip>
                         </v-col>
                         <!-- <v-btn color="accent" large @click.stop="newAuthorDialog=true"></v-btn> -->
-                        <new-yield-type :visible="newYieldTypeDialog" @close="closeYieldDialog" />
+                        <new-yield-type :visible="newYieldTypeDialog" @close="closeYieldDialog($event)" />
                     </v-row>
                     <v-row>
                         <v-col cols="11">
@@ -89,7 +89,7 @@
                             </v-tooltip>
                         </v-col>
                         <!-- <v-btn color="accent" large @click.stop="newAuthorDialog=true"></v-btn> -->
-                        <new-category v-if="newCategoryDialog" :categories="categories_list" :visible="newCategoryDialog" @close="closeCategoryDialog" />
+                        <new-category v-if="newCategoryDialog" :categories="categories_list" :visible="newCategoryDialog" @close="closeCategoryDialog($event)" />
                     </v-row>
                 </v-container>
             </div>
@@ -131,17 +131,20 @@ export default {
     watch:{
     },
     methods: {
-        closeDialog(){
+        closeDialog(author_id){
             this.loadAuthors()
             this.newAuthorDialog=false
+            this.author=author_id
         },
-        closeCategoryDialog(){
+        closeCategoryDialog(category_id){
             this.loadCategories()
             this.newCategoryDialog=false
+            this.category=category_id
         },
-        closeYieldDialog(){
+        closeYieldDialog(yield_id){
             this.loadYieldTypes()
             this.newYieldTypeDialog=false
+            this.yield_type=yield_id
         },
         clear() {
             this.$refs.form.reset();

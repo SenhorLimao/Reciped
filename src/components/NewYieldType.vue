@@ -46,7 +46,8 @@
     props:['visible'],
     data: () => ({
       dialog: false,
-      name:''
+      name:'',
+      yield_type_id:null
     }),
     computed: {
         show:{
@@ -67,11 +68,11 @@
         saveAndClose(){
             this.axios.post('yield_type/save',{name:this.name})
                 .then((result) => {
-                    console.log(result.data)
+                    this.yield_type_id=result.data.id
                 }).catch((err) => {
                     console.error(err)
                 })
-                .finally(()=>this.$emit('close'));
+                .finally(()=>this.$emit('close',this.yield_type_id));
         }
     },
   }

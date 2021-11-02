@@ -19,7 +19,8 @@ export default {
         yield_type:{
             get(){return this.getYieldType},
             set(value){
-                // this.$store.commit('setRecipeProp',{value:value.id,prop:'yield_type_id'})
+                this.$store.commit('setRecipeProp',{value:value?value.value||0:0,prop:'yield_type_id'})
+                console.log(value)
                 this.$store.commit('setYieldType',value)
             }
         },
