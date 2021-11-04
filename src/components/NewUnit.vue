@@ -100,6 +100,12 @@
         this.dialog=this.open
     },
     methods: {
+        clear(){
+          this.name=''
+          this.name_abbrev=''
+          this.plural=''
+          this.plural_abbrev=''
+        },
         saveAndClose(){
             this.axios.post('unit/save',
               {
@@ -110,7 +116,9 @@
               })
               .then((result) => {
                   this.unit_id=result.data.id
-              }).catch((err) => {
+              })
+              .then(() => this.clear())
+              .catch((err) => {
                   console.error(err)
               })
               .finally(()=>this.$emit('close',this.unit_id));

@@ -76,6 +76,10 @@
         this.categories_list=[{text:"Nenhuma",value:null}, ...this.categories]
     },
     methods: {
+        clear(){
+            this.name=''
+            this.category_father=null
+        },
         saveAndClose(){
           // let parent_id=null
 
@@ -105,7 +109,9 @@
             this.axios.post('category/save',data)
                 .then((result) => {
                     this.cathegory_id=result.data.id
-                }).catch((err) => {
+                })
+                .then(() => this.clear())
+                .catch((err) => {
                     console.error(err)
                 })
                 .finally(()=>this.$emit('close', this.cathegory_id));

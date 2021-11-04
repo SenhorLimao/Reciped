@@ -51,7 +51,7 @@ export default {
         steps:{
             get(){return this.getStepperSteps},
             set(value){this.$store.commit('setStepperSteps',value)}
-        }, 
+        },
         titles:{
                 get(){return this.getStepperTitles},
                 set(value){this.$store.commit('setStepperTitles',value)}
@@ -71,7 +71,7 @@ export default {
             'getStepperTitles',
             'getStepperSteps',
         ])
-        
+
     },
     methods: {
         saveIngredientList(){
@@ -82,23 +82,27 @@ export default {
                         console.log('il',r.data)
                         this.savePrepMethodList(r.data.id, element.prep_method_id)
                     })
+                    .catch(err=>console.error(err))
             });
         },
         saveAuthorList(){
             this.axios.post('author_list/save',
                 {author_id:this.getAuthor.id,recipe_id:this.recipe_id})
                 .then(r=>console.log(r.data))
+                .catch(err=>console.error(err))
         },
         saveCategoryList(){
             this.axios.post('category_list/save',
                 {category_id:this.getCategory.id,recipe_id:this.recipe_id})
                 .then(r=>console.log(r.data))
+                .catch(err=>console.error(err))
         },
         savePrepMethodList(ingredient_list_id, prep_method_id){
             console.log(ingredient_list_id, prep_method_id)
             this.axios.post('prep_method_list/save',
                 {prep_method_id,ingredient_list_id})
                 .then(r=>console.log(r.data))
+                .catch(err=>console.error(err))
         },
         saveRecipe(){
             // save recipe
@@ -112,6 +116,15 @@ export default {
                 .then(()=>this.saveCategoryList())
                 .then(()=>this.saveAuthorList())
                 .then(()=>console.log(this.getRecipe))
+                .then(()=>{
+                  this.$store.state.recipe = this.$store.state.recipe_default
+                  this.$store.state.category = this.$store.state.category_default
+                  this.$store.state.yield_type = this.$store.state.yield_type_default
+                  this.$store.state.prep_method = this.$store.state.prep_method_default
+                  this.$store.state.author = this.$store.state.author_default
+                  this.$store.state.ingredient_list = this.$store.state.ingredient_list_default
+                  this.$store.state.stepper.e1 = 1
+                })
                 .catch(err=>console.error(err))
         }
     },

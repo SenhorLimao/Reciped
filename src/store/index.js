@@ -13,7 +13,20 @@ export default new Vuex.Store({
       instructions:'',
       prep_time:null
     },
+    recipe_default: {
+      id:null,
+      title:'',
+      yield_amount:0,
+      yield_type_id:null,
+      instructions:'',
+      prep_time:null
+    },
     category: {
+      id:null,
+      name:'',
+      parent_id:null
+    },
+    category_default: {
       id:null,
       name:'',
       parent_id:null
@@ -22,7 +35,15 @@ export default new Vuex.Store({
       id:null,
       name:''
     },
+    yield_type_default: {
+      id:null,
+      name:''
+    },
     prep_method: {
+      id: null,
+      name: ''
+    },
+    prep_method_default: {
       id: null,
       name: ''
     },
@@ -30,7 +51,12 @@ export default new Vuex.Store({
       id:null,
       name:''
     },
+    author_default:{
+      id:null,
+      name:''
+    },
     ingredient_list:[],
+    ingredient_list_default:[],
     ingredient_list_header:[
       {
           text: 'Ingrediente',
@@ -123,7 +149,7 @@ export default new Vuex.Store({
       setStepperSteps:(state,payload)=>state.stepper.steps=payload,
       setStepperTitles:(state,payload)=>state.stepper.titles=payload,
       setStepperActualStep:(state,payload)=>state.stepper.e1=payload,
-      
+
   },
   actions: {
   },

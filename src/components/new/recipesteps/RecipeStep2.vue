@@ -6,7 +6,7 @@
         <v-form v-model="valid" ref="form" lazy-validation>
             <div class="pa-6">
                 <v-container fluid>
-                    
+
                     <v-row>
                         <v-col cols="5">
                             <v-autocomplete
@@ -57,7 +57,7 @@
                         </v-col>
 
                         <new-ingredient-group :visible="newIngredientGroupDialog" @close="closeIngredientGroupDialog($event)" />
-                        
+
                         <v-col cols="5">
                             <v-autocomplete
                                 label="Método de Preparo"
@@ -142,7 +142,7 @@
                 </v-container>
             </div>
         </v-form>
-<!-- 
+<!--
 
 
                             <div>step2</div>
@@ -251,7 +251,7 @@ export default {
                     this.ingredient_groups.unshift({text:'Nenhum', value:0, id:0})
                 })
         },
-        
+
         loadPrepMethods(){
             this.axios.get('prep_methods')
                 .then(r=>{
@@ -260,7 +260,7 @@ export default {
                     })
                 })
         },
-        
+
         insertIntoIngredientList(){
             let ingredient = this.ingredients.find(i=>i.id===this.ingredient)
             let prep_method = this.prep_methods.find(pm=>pm.id===this.prep_method)
@@ -285,7 +285,11 @@ export default {
                     delete:'',
                 }
             )
-            console.log("Ingredient List:", this.ingredient_list)
+            this.ingredient = null
+            this.prep_method = null
+            this.substitute_for = null
+            this.unit = null
+            this.ingredient_group = null
         }
     },
     created() {
@@ -293,8 +297,8 @@ export default {
         this.loadIngredients()
         this.loadPrepMethods()
         this.loadUnits()
-        // this.substitute_for = 
-        
+        // this.substitute_for =
+
     },
     computed:{
         substitutes(){

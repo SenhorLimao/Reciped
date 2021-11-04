@@ -65,11 +65,16 @@
         this.dialog=this.open
     },
     methods: {
+        clear(){
+            this.name=''
+        },
         saveAndClose(){
             this.axios.post('author/save',{name:this.name})
                 .then((result) => {
                     this.author_id=result.data.id
-                }).catch((err) => {
+                })
+                .then(() => this.clear())
+                .catch((err) => {
                     console.error(err)
                 })
                 .finally(()=>this.$emit('close', this.author_id));
