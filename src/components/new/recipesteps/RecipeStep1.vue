@@ -17,6 +17,7 @@
                                 v-model="author" 
                                 :items="author_list" 
                                 :rules="authorRules" 
+                                @change="authorChange"
                                 required>
                             </v-select>
                         </v-col>
@@ -131,20 +132,24 @@ export default {
     watch:{
     },
     methods: {
-        closeDialog(author_id){
+        authorChange(){
+            console.warn(this.author)
+        },
+        closeDialog(author_obj){
             this.loadAuthors()
             this.newAuthorDialog=false
-            this.author=author_id
+            this.author=author_obj
+            console.warn(this.author)
         },
-        closeCategoryDialog(category_id){
+        closeCategoryDialog(category_obj){
             this.loadCategories()
             this.newCategoryDialog=false
-            this.category=category_id
+            this.category=category_obj
         },
-        closeYieldDialog(yield_id){
+        closeYieldDialog(yield_obj){
             this.loadYieldTypes()
             this.newYieldTypeDialog=false
-            this.yield_type=yield_id
+            this.yield_type=yield_obj
         },
         clear() {
             this.$refs.form.reset();

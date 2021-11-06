@@ -47,7 +47,7 @@
     data: () => ({
       dialog: false,
       name:'',
-      author_id:null
+      // author_obj:null
     }),
     computed: {
         show:{
@@ -71,13 +71,14 @@
         saveAndClose(){
             this.axios.post('author/save',{name:this.name})
                 .then((result) => {
-                    this.author_id=result.data.id
+                    // this.author_obj=result.data
+                    this.$emit('close', {value:result.data.id, text:result.data.name, ...result.data})
                 })
                 .then(() => this.clear())
                 .catch((err) => {
                     console.error(err)
                 })
-                .finally(()=>this.$emit('close', this.author_id));
+                // .finally(()=>this.$emit('close', this.author_obj));
         }
     },
   }

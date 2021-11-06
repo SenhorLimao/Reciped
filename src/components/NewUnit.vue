@@ -115,13 +115,18 @@
                 plural_abbrev:this.plural_abbrev,
               })
               .then((result) => {
-                  this.unit_id=result.data.id
+                  // this.unit_id=result.data.id
+                  this.$emit('close',{
+                    value:result.data.id,
+                    text:result.data.name,
+                    ...result.data
+                  })
               })
               .then(() => this.clear())
               .catch((err) => {
                   console.error(err)
               })
-              .finally(()=>this.$emit('close',this.unit_id));
+              // .finally(()=>this.$emit('close',this.unit_id));
         }
     },
   }

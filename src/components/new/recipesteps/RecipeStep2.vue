@@ -215,6 +215,8 @@ export default {
             this.loadIngredients()
             this.newIngredientDialog=false
             this.ingredient=ingredient
+            console.log(this.ingredient)
+
         },
         closeIngredientGroupDialog(group){
             this.loadIngredientGroups()
@@ -262,18 +264,38 @@ export default {
         },
 
         insertIntoIngredientList(){
-            let ingredient = this.ingredients.find(i=>i.id===this.ingredient)
-            let prep_method = this.prep_methods.find(pm=>pm.id===this.prep_method)
-            let substitute_for = this.substitutes.find(i=>i.id===this.substitute_for)
-            let unit = this.units.find(u=>u.id===this.unit)
-            let ingredient_group = this.ingredient_groups.find(ig=>ig.id===this.ingredient_group)
-            console.log(ingredient_group)
+            // console.log(this.substitute_for)
+            let ingredient = this.ingredients.find(i=>{
+                    let obj = typeof(this.ingredient)==='object'?this.ingredient.id:this.ingredient
+                    return i.id===obj
+                })
+            let prep_method = this.prep_methods.find(pm=>{
+                    let obj = typeof(this.prep_method)==='object'?this.prep_method.id:this.prep_method
+                    return pm.id===obj
+                })
+            let substitute_for = this.substitutes.find(i=>{
+                    let obj = typeof(this.substitutes)==='object'?this.substitutes.id:this.substitutes
+                    return i.id===obj
+                })
+            let unit = this.units.find(u=>{
+                    let obj = typeof(this.unit)==='object'?this.unit.id:this.unit
+                    return u.id===obj
+                })
+            let ingredient_group = this.ingredient_groups.find(ig=>{
+                    let obj = typeof(this.ingredient_group)==='object'?this.ingredient_group.id:this.ingredient_group
+                    return ig.id===obj
+                })
+            console.log(this.ingredient)
+            // console.log(ingredient)
+            // console.log(ingredient_group)
+            // console.log(prep_method)
+            // console.log(unit)
             this.ingredient_list.push(
                 {
                     ingredient:ingredient.text,
                     ingredient_id: ingredient.id,
-                    substitute_for: substitute_for.text,
-                    substitute_for_id: substitute_for.id,
+                    substitute_for: substitute_for?substitute_for.text:null,
+                    substitute_for_id: substitute_for?substitute_for.id:null,
                     prep_method: prep_method.text,
                     prep_method_id: prep_method.id,
                     unit_amount:this.unit_amount,

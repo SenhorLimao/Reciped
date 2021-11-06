@@ -71,13 +71,18 @@
         saveAndClose(){
             this.axios.post('ingredient/save',{name:this.name})
                 .then((result) => {
-                    this.group_id = result.data.id
+                    // this.group_id = result.data.id
+                    this.$emit('close', {
+                        text: result.data.name,
+                        value: result.data.id,
+                        ...result.data
+                    })
                 })
                 .then(() => this.clear())
                 .catch((err) => {
                     console.error(err)
                 })
-                .finally(()=>this.$emit('close',this.group_id));
+                // .finally(()=>this.$emit('close',this.group_id));
         }
     },
   }

@@ -71,13 +71,18 @@
         saveAndClose(){
             this.axios.post('yield_type/save',{name:this.name})
                 .then((result) => {
-                    this.yield_type_id=result.data.id
+                    // this.yield_type_id=result.data.id
+                    this.$emit('close',{
+                      value:result.data.id,
+                      text:result.data.name,
+                      ...result.data
+                    })
                 })
                 .then(()=>this.clear())
                 .catch((err) => {
                     console.error(err)
                 })
-                .finally(()=>this.$emit('close',this.yield_type_id));
+                // .finally(()=>this.$emit('close',this.yield_type_id));
         }
     },
   }

@@ -1,7 +1,7 @@
 import { mapGetters } from 'vuex'
 export default {
     data:()=>({
-
+        snackbar: false,
     }),
     computed: {
         recipe_id:{
@@ -123,7 +123,12 @@ export default {
                   this.$store.state.prep_method = this.$store.state.prep_method_default
                   this.$store.state.author = this.$store.state.author_default
                   this.$store.state.ingredient_list = this.$store.state.ingredient_list_default
-                  this.$store.state.stepper.e1 = 1
+                  this.snackbar = true
+                })
+                .then(()=>{
+                    setTimeout(()=>{
+                        this.$store.state.stepper.e1 = 1
+                    },2000)
                 })
                 .catch(err=>console.error(err))
         }

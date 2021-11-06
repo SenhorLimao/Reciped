@@ -15,6 +15,16 @@
                       <v-card dark class="mb-12">
                           <component :is="`recipe-step-${n}`" :ref="`step${n}`"></component>
                       </v-card>
+                      <v-snackbar
+                        :timeout="2000"
+                        v-model="snackbar"
+                        absolute
+                        centered
+                        color="deep-purple accent-4"
+                        elevation="24"
+                      >
+                        Receita Salva com Sucesso!
+                      </v-snackbar>
                       <div class="d-flex justify-space-between">
                         <v-btn color="warning">
                             Cancelar

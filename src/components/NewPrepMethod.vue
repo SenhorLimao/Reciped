@@ -71,13 +71,18 @@
         saveAndClose(){
             this.axios.post('prep_method/save',{name:this.name})
                 .then((result) => {
-                    this.prep_method_id=result.data.id
+                    // this.prep_method_id=result.data.id
+                    this.$emit('close',{
+                      value:result.data.id,
+                      text:result.data.name,
+                      ...result.data
+                    })
                 })
                 .then(() => this.clear())
                 .catch((err) => {
                     console.error(err)
                 })
-                .finally(()=>this.$emit('close',this.prep_method_id));
+                // .finally(()=>this.$emit('close',this.prep_method_id));
         }
     },
   }
