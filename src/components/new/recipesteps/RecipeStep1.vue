@@ -47,7 +47,7 @@
                         </v-col>
                         <v-col cols="9">
                             <v-select 
-                                label="Unidade de Medida" 
+                                label="Quantidade" 
                                 return-object 
                                 v-model="yield_type" 
                                 :items="yield_type_items">

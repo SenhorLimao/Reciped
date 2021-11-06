@@ -76,9 +76,9 @@ export default {
         
         let recipeNotFilled = !(!!this.getRecipe.title &&
                  !!this.getRecipe.prep_time &&
-                 !!this.getRecipe.yield_amount &&
-                 !!this.getRecipe.yield_type_id &&
                  !!this.getRecipe.instructions)
+                //  !!this.getRecipe.yield_amount &&
+                //  !!this.getRecipe.yield_type_id &&
         
         let ingredientListNotFilled = this.getIngredientList.length == 0
 

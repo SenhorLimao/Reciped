@@ -65,7 +65,7 @@ export default new Vuex.Store({
           value: 'ingredient',
       },
       {
-          text: 'Substituto para',
+          text: 'Pode ser substituído por',
           align: 'start',
           sortable: true,
           value: 'substitute_for',
