@@ -9,7 +9,7 @@
                   </v-list-item-avatar>
                   <v-list-item-content>
                       <v-list-item-title>{{item.title|uppercase}}</v-list-item-title>
-                      <v-list-item-subtitle>{{resumee(item.instructions)}}</v-list-item-subtitle>
+                      <v-list-item-subtitle>{{item.instructions|resumee}}</v-list-item-subtitle>
                   </v-list-item-content>
               </v-list-item>
           </template>
