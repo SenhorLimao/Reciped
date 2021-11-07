@@ -11,6 +11,7 @@
                 cols="12"
 
               >
+              <!-- Campo de texto com o nome do autor a ser criado -->
                 <v-text-field
                   label="Nome"
                   required
@@ -23,6 +24,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
+          // Cancela o diálogo
           <v-btn
             color="blue darken-1"
             outlined
@@ -30,6 +32,7 @@
           >
             Cancelar
           </v-btn>
+          <!-- Botão para salvar o autor -->
           <v-btn
             color="blue darken-1"
             text
@@ -68,10 +71,12 @@
         clear(){
             this.name=''
         },
+        // Cria um novo autor e fecha o diálogo
         saveAndClose(){
             this.axios.post('author/save',{name:this.name})
                 .then((result) => {
                     // this.author_obj=result.data
+                    // Fecha o diálogo e retorna o autor criado
                     this.$emit('close', {value:result.data.id, text:result.data.name, ...result.data})
                 })
                 .then(() => this.clear())

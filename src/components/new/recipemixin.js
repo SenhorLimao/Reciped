@@ -3,6 +3,7 @@ export default {
     data:()=>({
         snackbar: false,
     }),
+    // Dados computados da store do vuex
     computed: {
         recipe_id:{
             get(){return this.getRecipe.id},
@@ -74,7 +75,9 @@ export default {
 
     },
     methods: {
+        // Salva a lista de ingredientes
         saveIngredientList(){
+            // Para cada elemento da lista de ingredientes, insere na tabela
             this.getIngredientList.forEach(element => {
                 element.recipe_id = this.recipe_id
                 this.axios.post('ingredient_list/save', element)
@@ -85,18 +88,21 @@ export default {
                     .catch(err=>console.error(err))
             });
         },
+        // Salva a referencia da receita ao autor
         saveAuthorList(){
             this.axios.post('author_list/save',
                 {author_id:this.getAuthor.id,recipe_id:this.recipe_id})
                 .then(r=>console.log(r.data))
                 .catch(err=>console.error(err))
         },
+        // Salva a referencia da receita à categoria
         saveCategoryList(){
             this.axios.post('category_list/save',
                 {category_id:this.getCategory.id,recipe_id:this.recipe_id})
                 .then(r=>console.log(r.data))
                 .catch(err=>console.error(err))
         },
+        // Salva a referencia da receita ao método de preparo
         savePrepMethodList(ingredient_list_id, prep_method_id){
             console.log(ingredient_list_id, prep_method_id)
             this.axios.post('prep_method_list/save',
@@ -104,18 +110,25 @@ export default {
                 .then(r=>console.log(r.data))
                 .catch(err=>console.error(err))
         },
+        // Salva a receita e as tabelas auxiliares
         saveRecipe(){
             // save recipe
             // save ingredient_list
             // save prep_method_list
             // save author_list
             // save category_list
+            //Salva a receita
             this.axios.post('recipe/save',this.getRecipe)
+                // Seta o id da receita
                 .then((r)=>this.recipe_id = r.data.id)
+                // Salva a lista de ingredientes
                 .then(()=>this.saveIngredientList())
+                // Salva a referência à categoria
                 .then(()=>this.saveCategoryList())
+                // Salva a referência ao autor
                 .then(()=>this.saveAuthorList())
                 .then(()=>console.log(this.getRecipe))
+                // Limpa o formulário
                 .then(()=>{
                   this.$store.state.recipe = this.$store.state.recipe_default
                   this.$store.state.category = this.$store.state.category_default
@@ -123,9 +136,11 @@ export default {
                   this.$store.state.prep_method = this.$store.state.prep_method_default
                   this.$store.state.author = this.$store.state.author_default
                   this.$store.state.ingredient_list = this.$store.state.ingredient_list_default
+                  // Apresenta na tela uma mensagem de sucesso
                   this.snackbar = true
                 })
                 .then(()=>{
+                    // Retorna ao primeiro passo do stepper
                     setTimeout(()=>{
                         this.$store.state.stepper.e1 = 1
                     },2000)

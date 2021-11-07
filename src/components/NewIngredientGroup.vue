@@ -9,7 +9,6 @@
             <v-row>
               <v-col
                 cols="12"
-
               >
                 <v-text-field
                   label="Nome"

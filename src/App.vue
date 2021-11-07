@@ -5,6 +5,7 @@
       color="blue-grey darken-4"
       dark
     >
+    <!-- Botão para adicionar nova receita -->
       <v-row align-center>
         <div class="d-flex align-center">
           <v-tooltip bottom>
@@ -19,19 +20,8 @@
           </v-tooltip>
         </div>
         <v-spacer></v-spacer>
-        <!-- <div class="d-flex align-center">
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn fab dark small color="primary"
-                @click="newRecipe"
-                v-bind="attrs" v-on="on">
-                  <v-icon dark>mdi-plus</v-icon>
-              </v-btn>
-            </template>
-            <span>Nova Receita</span>
-          </v-tooltip>
-        </div>
-        <v-spacer></v-spacer> -->
+        
+        <!-- Botão para mostrar o índice de receitas -->
         <div class="d-flex align-center">
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
@@ -45,6 +35,8 @@
           </v-tooltip>
         </div>
         <v-spacer></v-spacer>
+
+        <!-- Botão para mostrar a lista de autores -->
         <div class="d-flex align-center">
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
@@ -58,6 +50,8 @@
           </v-tooltip>
         </div>
         <v-spacer></v-spacer>
+
+        <!-- Campo de busca por nome da receita ou autor -->
         <div class="d-flex align-end">
           <v-text-field
             dense
@@ -71,6 +65,7 @@
             @keyup="searchRecipesAndAuthors"
           ></v-text-field>
 
+          <!-- Lista de resultados da busca do campo acima -->
           <div v-if="searching" class="searchResults">
             <ul v-if="authorsSearch.length>0">
               <em>Autores:</em>
@@ -83,42 +78,39 @@
                 @click="searchFieldRecipesAndAuthors='';showRecipe(rS)">{{rS.title}}</li>
             </ul>
           </div>
-            <!-- @keyup="searchDebounce" -->
-          <!-- <v-text-field
-            name="name"
-            label="label"
-            id="id"
-          ></v-text-field>
-          <v-btn flat icon color="primary" disabled>
-            <v-icon>mdi-magnify</v-icon>
-          </v-btn> -->
-          <!-- <v-input
-            prepend-icon="mdi-magnify"
-            type="text"
-        >
-          <input type="text" name="" id=""> 
-        </v-input> -->
         </div>
       </v-row>
     </v-app-bar>
 
+    <!-- Painel principal -->
     <v-main class="dark">
-        
+      <!-- Mostra uma receita caso a tela selecionada seja uma receita.
+      Caso receba um evento de showAuthor, chama a função para mostrar a 
+      lista de receitas do autor -->
       <Recipe v-if="selected==='recipe'" :recipe="recipe" @showAuthor="showAuthor($event)" />
-      <!-- <hello-world /> -->
-      <!-- <NewRecipe v-else-if="selected==='newRecipe'" /> -->
-      <index v-else-if="selected==='index'" @showRecipe="showRecipe($event)" />
-      <author-list v-else-if="selected==='authors'" @showAuthor="showAuthor($event)" />
-      <author v-else-if="selected==='author'" :author="author" @showRecipe="showRecipe($event)" />
-      <recipe-stepper v-else-if="selected==='new->recipe'" :author="author" @showRecipe="showRecipe($event)" />
 
+      <!-- Mostra o índice de receitas caso a tela selecionada seja o índice -->
+      <index v-else-if="selected==='index'" @showRecipe="showRecipe($event)" />
+
+      <!-- Mostra a lista de autores caso a tela selecionada seja a lista de autores
+      Caso receba um evento de showAuthor, chama a função para mostrar a 
+      lista de receitas do autor -->
+      <author-list v-else-if="selected==='authors'" @showAuthor="showAuthor($event)" />
+
+      <!-- Mostra a lista de receitas de um autor. Caso receba um evento de showRecipe,
+      chama a função para mostrar a receita. -->
+      <author v-else-if="selected==='author'" :author="author" @showRecipe="showRecipe($event)" />
+      
+      <!-- Mostra a tela de cadastro de nova receita -->
+      <recipe-stepper v-else-if="selected==='new->recipe'" :author="author" />
     </v-main>
   </v-app>
 </template>
 
 <script>
+
+// Importacoes
 import Index from './components/Index.vue';
-// import NewRecipe from './components/NewRecipe.vue';
 import Recipe from './components/Recipe.vue';
 import AuthorList from './components/AuthorList.vue';
 import Author from './components/Author.vue';
@@ -126,48 +118,53 @@ import RecipeStepper from './components/new/RecipeStepper.vue';
 
 export default {
   name: 'App',
-
   components: {
     Recipe,
     Index,
-    // NewRecipe,
     AuthorList,
     Author,
     RecipeStepper,
   },
   data: () => ({
-    //
-    selected: 'index',
-    recipe: {},
-    author: {},
-    searchFieldRecipesAndAuthors:'',
-    timeout: null,
-    authorsSearch:[],
-    recipesSearch:[],
+    selected: 'index', // Tela selecionada
+    recipe: {}, // Receita selecionada
+    author: {}, // Autor selecionado
+    searchFieldRecipesAndAuthors:'', // Campo de busca
+    timeout: null, // Temporizador para busca
+    authorsSearch:[], // Resultados da busca por autor
+    recipesSearch:[], // Resultados da busca por receita
   }),
   computed:{
+    // Mostra os resultados da busca por autor ou receita, 
+    // caso o campo de busca esteja preenchido
     searching(){
       return (this.searchFieldRecipesAndAuthors.length>0)
     }
   },
   methods: {
+    // Chama a tela de cadastro de nova receita
     newRecipe(){
       this.selected='newRecipe'
     },
+    // Chama a tela de índice de receitas
     showIndex(){
       this.selected='index'
     },
+    // Chama a tela de lista de autores
     showAuthors(){
       this.selected='authors'
     },
+    // Chama a tela de uma receita selecionada (evento de showRecipe)
     showRecipe(event){
       this.recipe = event
       this.selected="recipe"
     },
+    // Chama a tela de um autor selecionado (evento de showAuthor)
     showAuthor(event){
       this.author = event,
       this.selected='author'
     },
+    // TODO: Fazer o debounce da pesquisa por autor e receita
     searchDebounce(){
       if(this.timeout){
         clearTimeout(this.timeout)
@@ -176,17 +173,21 @@ export default {
         console.log(this.searchFieldRecipesAndAuthors)
       }, 500);
     },
+
+    // Realiza a busca por autor e receita
     searchRecipesAndAuthors(){
       if(this.timeout){
         clearTimeout(this.timeout)
       }
       this.timeout = setTimeout(() => {
+        // Busca por autor e insere os resultados na lista de resultados da pesquisa
         this.axios.get(`authors/namelike/${this.searchFieldRecipesAndAuthors}`)
           .then((result) => {
             this.authorsSearch=result.data[0]
           }).catch((err) => {
             console.error(err)
           });
+        // Busca por receita e insere os resultados na lista de resultados da pesquisa
         this.axios.get(`recipes/namelike/${this.searchFieldRecipesAndAuthors}`)
           .then((result) => {
             this.recipesSearch=result.data[0]

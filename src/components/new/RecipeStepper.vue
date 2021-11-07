@@ -1,7 +1,9 @@
 <template>
     <v-container grid-list-md>
         <v-card dark>
+          <!-- Stepper de inserção de nova receita -->
           <v-stepper dark v-model="e1">
+            <!-- Cabeçalho do stepper -->
               <v-stepper-header>
                   <template v-for="n in steps">
                       <v-stepper-step :key="`${n}-step`" :complete="e1 > n" :step="n" editable>
@@ -10,11 +12,17 @@
                       <v-divider v-if="n !== steps" :key="n"></v-divider>
                   </template>
               </v-stepper-header>
+              <!-- Itens do stepper -->
               <v-stepper-items>
                   <v-stepper-content v-for="n in steps" :key="`${n}-content`" :step="n">
+                    <!-- Card que mostra o componente atualmente sendo exibido no stepper
+                    (recipe-step-(1-4)) -->
                       <v-card dark class="mb-12">
                           <component :is="`recipe-step-${n}`" :ref="`step${n}`"></component>
                       </v-card>
+                      <!-- Componente utilizado para emitir alertas na tela -->
+                      <!-- TODO: personalizar cor e mensagem, para exibir mensagens
+                      de erro também -->
                       <v-snackbar
                         :timeout="2000"
                         v-model="snackbar"
@@ -44,26 +52,26 @@
 </template>
 
 <script>
+// Importação dos componentes responsáveis por cada passo do stepper
 import RecipeStep1 from './recipesteps/RecipeStep1.vue'
 import RecipeStep2 from './recipesteps/RecipeStep2.vue'
 import RecipeStep3 from './recipesteps/RecipeStep3.vue'
 import RecipeStep4 from './recipesteps/RecipeStep4.vue'
+
+// Importação do mapeamento dos getters da store do vuex
 import { mapGetters } from 'vuex'
+// Importação do mixin de receitas
 import RecipeMixin from './recipemixin'
 export default {
   mixins: [RecipeMixin],
   components: { RecipeStep1, RecipeStep2, RecipeStep3, RecipeStep4 },
     data () {
       return {
-        // e1: 1,
-        // steps: 4,
-        // titles: ['Título, Autor, Rendimento, Categoria',
-        //           'Lista de Ingredientes',
-        //           'Instruções',
-        //           'Review']
+        
       }
     },
     watch: {
+      // Se o valor de e1 mudar, atualiza o valor de step
       steps (val) {
         if (this.e1 > val) {
           this.e1 = val
@@ -72,18 +80,22 @@ export default {
     },
 
     computed: {
+      // Verifica se os campos obrigatórios foram preenchidos para habilitar o botão de salvar
       notFilled(){
-        
+        // Verifica se os campos da receita foram preenchidos
         let recipeNotFilled = !(!!this.getRecipe.title &&
                  !!this.getRecipe.prep_time &&
                  !!this.getRecipe.instructions)
                 //  !!this.getRecipe.yield_amount &&
                 //  !!this.getRecipe.yield_type_id &&
         
+        // Verifica se a lista de ingredientes foi preenchida
         let ingredientListNotFilled = this.getIngredientList.length == 0
 
+        // Verifica se a categoria foi preenchida
         let categoryNotFilled = !this.getCategory.id
 
+        // Verifica se o autor foi preenchido
         let authorNotFilled = !this.getAuthor.id
 
         console.log('falsies Recipe,IngredientList,Category,Author',
@@ -92,6 +104,7 @@ export default {
           categoryNotFilled, 
           authorNotFilled)
 
+        // Retorna true se nem todos os campos obrigatórios estiverem preenchidos
         return recipeNotFilled || ingredientListNotFilled || categoryNotFilled || authorNotFilled
         // return !(!!this.getRecipe.title &&
         //          !!this.getRecipe.prep_time &&
@@ -99,7 +112,7 @@ export default {
         //          !!this.getRecipe.yield_type_id &&
         //          !!this.getRecipe.instructions)
       },
-      
+      // Mapeia os getters da store do vuex
       ...mapGetters([
         'getStepperTitles',
         'getStepperSteps',
@@ -107,6 +120,7 @@ export default {
       ])
     },
     methods: {
+      // Avança para o próximo passo do stepper
       nextStep (n) {
         // this.$store.state.recipe.yield_type_id=this.$store.state.yield_type.id?this.$store.state.yield_type.id:null
         if (n === this.steps) {
