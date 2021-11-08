@@ -1,8 +1,7 @@
 <template>
   <v-container>
       <v-list dark three-line>
-          <template v-for="item in items">
-              <!-- <v-divider v-else-if="item.divider" :inset="item.inset" :key="index"></v-divider> -->
+          <template v-for="item in items" class="list">
               <v-list-item @click="goto(item)" :key="item.id">
                   <v-list-item-avatar>
                       <h2>{{item.id}}</h2>
@@ -28,9 +27,12 @@ export default {
         
     },
     methods: {
+        // Carrega a receita do item clicado
         goto(item){
             this.$emit('showRecipe', item)
         },
+
+        // TODO: carregar imagem da receita
         getImgUri(blob){
             var URL = window.URL || window.webkitURL
             if(blob){
@@ -42,11 +44,15 @@ export default {
             // img.src = uri;
             return ''
         },
+
+        // DEPRECATED: método para mostrar um resumo da receita.
+        // Substituído por um filtro de mesmo nome
         resumee(value){
             return value.lenght<100?value:`${value.substr(0,97)}...`
         }
     },
     created(){
+        // Carrega a lista de receitas salvas no índice
         this.axios.get('recipes')
             .then((r)=>{
                 this.items = r.data
@@ -55,6 +61,8 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+.list{
+    width: 70vw;
+}
 </style>

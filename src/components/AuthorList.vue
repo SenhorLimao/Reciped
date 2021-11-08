@@ -1,6 +1,6 @@
 <template>
     <v-container>
-      <v-list dark three-line>
+      <v-list dark three-line class="list">
           <template v-for="author in authors">
               <!-- <v-divider v-else-if="item.divider" :inset="item.inset" :key="index"></v-divider> -->
               <v-list-item :key="author.id" @click="$emit('showAuthor',author)">
@@ -41,6 +41,8 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+.list {
+    width: 70vw;
+}
 </style>

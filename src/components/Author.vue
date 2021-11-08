@@ -8,7 +8,7 @@
             </v-card>
         </v-row>
         <v-row justify="space-around" class="mt-4">
-            <v-list dark three-line>
+            <v-list dark three-line class="list">
               <template v-for="recipe in recipes">
                   <!-- <v-divider v-else-if="item.divider" :inset="item.inset" :key="index"></v-divider> -->
                   <v-list-item @click="$emit('showRecipe',recipe)" :key="recipe.id">
@@ -50,6 +50,8 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+.list {
+    width: 70vw;
+}
 </style>

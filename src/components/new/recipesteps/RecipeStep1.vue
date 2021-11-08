@@ -3,12 +3,14 @@
         <v-form v-model="valid" ref="form" lazy-validation>
             <div class="pa-6">
                 <v-container fluid>
+                    <!-- Título da receita (nome) -->
                     <v-row>
                         <v-col>
                             <v-text-field label="Título" v-model="title" :rules="titleRules" :counter="30" required>
                             </v-text-field>
                         </v-col>
                     </v-row>
+                    <!-- Seletor do autor da receita -->
                     <v-row>
                         <v-col cols="11">
                             <v-select 
@@ -21,6 +23,7 @@
                                 required>
                             </v-select>
                         </v-col>
+                        <!-- Botão usado para inserir novo autor na tabela de autores -->
                         <v-col cols="1">
                             <v-tooltip bottom>
                                 <template v-slot:activator="{ on, attrs }">
@@ -32,11 +35,12 @@
                                 <span>Criar novo Autor</span>
                             </v-tooltip>
                         </v-col>
-                        <!-- <v-btn color="accent" large @click.stop="newAuthorDialog=true"></v-btn> -->
+                        <!-- Diálogo aberto para fornecer o nome do autor a ser incluído -->
                         <new-author :visible="newAuthorDialog" @close="closeDialog($event)" />
 
                     </v-row>
                     <v-row>
+                        <!-- Quantidade numérica de rendimento da receita -->
                         <v-col cols="2">
                             <v-text-field 
                                 label="Rendimento" 
@@ -45,6 +49,7 @@
                                 type="number">
                             </v-text-field>
                         </v-col>
+                        <!-- Seletor do tipo de quantidade do rendimento -->
                         <v-col cols="9">
                             <v-select 
                                 label="Quantidade" 
@@ -53,6 +58,7 @@
                                 :items="yield_type_items">
                             </v-select>
                         </v-col>
+                        <!-- Botão para incluir novo tipo de quantidade de rendimento -->
                         <v-col cols="1">
                             <v-tooltip bottom>
                                 <template v-slot:activator="{ on, attrs }">
@@ -64,11 +70,12 @@
                                 <span>Adicionar unidade de medida</span>
                             </v-tooltip>
                         </v-col>
-                        <!-- <v-btn color="accent" large @click.stop="newAuthorDialog=true"></v-btn> -->
+                        <!-- Diálogo aberto para fornecer o nome do tipo de quantidade de rendimento a ser incluído -->
                         <new-yield-type :visible="newYieldTypeDialog" @close="closeYieldDialog($event)" />
                     </v-row>
                     <v-row>
                         <v-col cols="11">
+                            <!-- Seletor de categoria da receita -->
                             <v-select 
                                 label="Categoria" 
                                 return-object 
@@ -78,6 +85,7 @@
                                 required>
                             </v-select>
                         </v-col>
+                        <!-- Botão para incluir nova categoria -->
                         <v-col cols="1">
                             <v-tooltip bottom>
                                 <template v-slot:activator="{ on, attrs }">
@@ -89,7 +97,7 @@
                                 <span>Criar nova Categoria</span>
                             </v-tooltip>
                         </v-col>
-                        <!-- <v-btn color="accent" large @click.stop="newAuthorDialog=true"></v-btn> -->
+                        <!-- Diálogo aberto para fornecer o nome da categoria a ser incluída -->
                         <new-category v-if="newCategoryDialog" :categories="categories_list" :visible="newCategoryDialog" @close="closeCategoryDialog($event)" />
                     </v-row>
                 </v-container>
