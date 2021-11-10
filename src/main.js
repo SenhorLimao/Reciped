@@ -10,7 +10,7 @@ Vue.filter('uppercase',
 	v=> v.toUpperCase()
 )
 Vue.filter('resumee',
-	value=> value.lenght<100?value:`${value.substr(0,97)}...`
+	value=> value.length<100?value:`${value.substr(0,97)}...`
 )
 
 
