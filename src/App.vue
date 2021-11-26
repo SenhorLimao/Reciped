@@ -116,6 +116,8 @@ import AuthorList from './components/AuthorList.vue';
 import Author from './components/Author.vue';
 import RecipeStepper from './components/new/RecipeStepper.vue';
 
+
+
 export default {
   name: 'App',
   components: {
@@ -141,6 +143,7 @@ export default {
       return (this.searchFieldRecipesAndAuthors.length>0)
     }
   },
+  
   methods: {
     // Chama a tela de cadastro de nova receita
     newRecipe(){
@@ -173,7 +176,7 @@ export default {
         console.log(this.searchFieldRecipesAndAuthors)
       }, 500);
     },
-
+    
     // Realiza a busca por autor e receita
     searchRecipesAndAuthors(){
       if(this.timeout){

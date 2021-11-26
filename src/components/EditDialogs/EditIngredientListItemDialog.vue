@@ -33,6 +33,7 @@
                                     </v-tooltip>
                                 </v-col>
                                 <!-- Seletor de ingrediente substituto ao principal -->
+                                <!-- TODO: Carregar aqui o valor - não está fazendo: receita de exemplo: id 25 -->
                                 <v-col cols="5">
                                     <v-autocomplete 
                                         label="Pode ser substituído por:" 
@@ -191,14 +192,7 @@ export default {
                 }
             }
         },
-        ingredientObj:{
-            get() {
-                return this.ingredient
-            },
-            set(value) {
-                this.ingredient = value
-            }
-        },
+        
         // ingredient: {
         //     get() {
         //         let ingredientTmp=this.getIngredientById(this.ingredientListItem.ingredient_id)
@@ -225,8 +219,14 @@ export default {
     created() {
         this.dialog = this.open
         this.getIngredientById(this.ingredientListItem.ingredient_id)
+        this.getTableItemById('prep_method', this.ingredientListItem.pm_id, 'prep_method')
+        this.getTableItemById('unit', this.ingredientListItem.unit_id, 'unit')
+        this.getTableItemById('ingredient',this.ingredientListItem.substitute_for,'substitute_for')
+        this.getTableItemById('ingredient_group',this.ingredientListItem.g_id,'ingredient_group')
+
         console.log("🚀 ~ file: EditIngredientListItemDialog.vue ~ line 205 ~ created ~ this.ingredientListItem", this.ingredientListItem)
         console.log("🚀 ~ file: EditIngredientListItemDialog.vue ~ line 205 ~ created ~ ingredient", this.ingredient)
+        
         this.axios.get('ingredients')
             .then(response => {
                 this.ingredients = response.data
@@ -234,6 +234,8 @@ export default {
         this.loadTable('ingredient_groups').then(response => this.ingredient_groups = response)
         this.loadTable('prep_methods').then(response => this.prep_methods = response)
         this.loadTable('units').then(response => this.units = response)
+        this.amount = this.ingredientListItem.amount
+        
         // this.ingredient_groups = await (this.loadTable('ingredient_groups').then(response => response))
         console.log("🚀 ~ file: EditIngredientListItemDialog.vue ~ line 229 ~ created ~ this.ingredient_groups", this.ingredient_groups)
     },
@@ -244,6 +246,7 @@ export default {
         getIngredientById(id) {
             this.axios.get(`/ingredient/${id}`)
                 .then(response => {
+                    console.log(response.data)
                     this.ingredient = response.data
                     console.log("🚀 ~ file: EditIngredientListItemDialog.vue ~ line 224 ~ getIngredientById ~ this.ingredient", this.ingredient)
                 })
@@ -251,25 +254,117 @@ export default {
                     console.log(error)
                 })
         },
+        getTableItemById(table, id, dataObjectKey) {
+            this.axios.get(`/${table}/${id}`)
+                .then(response => {
+                    console.log(response.data)
+                    this[dataObjectKey] = response.data
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+
+        },
         clear() {
             this.name = ''
         },
+
+        getIdFromModel(model) {
+            if (model === null) {
+                return null
+            }
+            else if (typeof(model) === 'object') {
+                return model.id
+            } else if (typeof(model)  === 'number') {
+                return model
+            }
+            return null
+        },
+
+        saveIngredientList(){
+            // TODO: Verificar item a item se não são nulos e, não sendo, se o campo id é válido
+            // TODO: salvou um objeto na database pro group_id. verificar.
+
+            let unit_id = this.getIdFromModel(this.unit)
+            let substitute_for_id = this.getIdFromModel(this.substitute_for)
+            let group_id = this.getIdFromModel(this.ingredient_group)
+            let ingredient_id = this.getIdFromModel(this.ingredient)
+            let newIngredientListItem = {
+                id: this.ingredientListItem.id,
+                unit_id: unit_id,
+                substitute_for: substitute_for_id,
+                group_id: group_id,
+                amount: this.amount,
+                ingredient_id: ingredient_id,
+            }
+          this.axios.put(`/ingredient_list/${this.ingredientListItem.id}`,
+            {
+                ...newIngredientListItem,
+            })
+            .then(response => {
+                console.log(response)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        },
         saveAndClose() {
-            this.axios.post('', {
-                    name: this.name
+
+            let method = this.ingredientListItem.prm_id ? 'put' : 'post'
+            let url = this.ingredientListItem.prm_id ? `/prep_method_list/${this.ingredientListItem.id}` : `/prep_method_list/save`
+            let data = this.ingredientListItem.prm_id ? 
+                {
+                    prep_method_id: this.getIdFromModel(this.prep_method),
+                } : 
+                {
+                    ingredient_list_id: this.getIdFromModel(this.ingredientListItem),
+                    prep_method_id: this.getIdFromModel(this.prep_method),
+                }
+            this.axios({
+                method: method,
+                url: url,
+                data: data,
+            })
+                .then((response) => {
+                    console.log(response.data)
+                    this.saveIngredientList()
                 })
-                .then((result) => {
-                    // this.group_id = result.data.id
-                    this.$emit('close', {
-                        text: result.data.name,
-                        value: result.data.id,
-                        ...result.data
-                    })
+                .catch(error => {
+                    console.log(error)
                 })
-                .then(() => this.clear())
-                .catch((err) => {
-                    console.error(err)
+                .finally(() => {
+                    this.dialog = false
+                    this.$emit('close')
                 })
+
+            // this.axios.put(`/prep_method_list/${this.ingredientListItem.id}`,
+            //     {
+            //         prep_method_id: this.prep_method.id,
+            //     })
+            //     .then(response => {
+            //         console.log(response)
+
+            //     })
+            //     .catch(error => {
+            //         console.log(error)
+            //     })
+
+            // console.log(this.newIngredientListItem)
+            // this.axios.post('', {
+            //         name: this.name
+            //     })
+            //     .then((result) => {
+            //         // this.group_id = result.data.id
+            //         this.$emit('close', {
+            //             text: result.data.name,
+            //             value: result.data.id,
+            //             ...result.data
+            //         })
+            //     })
+            //     .then(() => this.clear())
+            //     .catch((err) => {
+            //         console.error(err)
+            //     })
             // .finally(()=>this.$emit('close',this.group_id));
         },
         closeIngredientDialog() {

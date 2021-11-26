@@ -169,7 +169,7 @@ export default {
                     text: 'Pode ser substituído por',
                     align: 'start',
                     sortable: true,
-                    value: 'substitute_for',
+                    value: 'substitute_for_name',
                 },
                 {
                     text: 'Modo de Preparo',
@@ -187,7 +187,7 @@ export default {
                     text: 'Unidade de Medida',
                     align: 'start',
                     sortable: true,
-                    value: 'unit',
+                    value: 'u_name',
                 },
                 {
                     text: 'Usado para',
@@ -210,7 +210,13 @@ export default {
             ],
         }
     },
+    computed: {
+    },
     methods: {
+        substitute_for_name(id){
+            let substitute = this.ingredients.find(ingredient => ingredient.id == id)
+            return substitute?substitute.name?substitute.name:'':''
+        },
         goto(id){
             this.$emit('showRecipe', id)
         },
@@ -223,45 +229,55 @@ export default {
             // this.loadUnits()
             console.log(event)
             this.editIngredientListItemDialog=false
+            this.loadIngredientsList()
         },
         editIngredientListItem(item){
             console.log(item)
             this.ingredientListItemEdit = item
             this.editIngredientListItemDialog=true
         },
-    },
-    created(){
-        // Ao iniciar o componente, busca na sequência as informações
-        // da tabela de receitas, da tabela de rendimento da receita
-        // e da tabela de autores da receita
-
-        // TODO: incluir a lista de ingredientes da receita
-        // com método de preparo e outras informações relevantes
-        // Utilizar como parâmetro as informações incluídas no
-        // component RecipeStep2.vue
-        this.axios.get(`ingredient_list/recipe/${this.recipe.id}`)
-            .then(response => {
-                this.ingredient_list = response.data.map(ingredient => {
-                    return {
-                        ...ingredient, key: `${ingredient.id}-${ingredient.pm_id}`,
-                    }
+        loadRecipe(){
+            this.loadIngredients()
+            this.loadIngredientsList()
+            this.loadYieldType()
+            this.loadAuthor()
+        },
+        loadIngredients(){
+            this.axios.get(`ingredients/recipe/${this.recipe.id}`)
+                .then(i=>{
+                    this.ingredients = i.data
                 })
-                console.log(this.ingredient_list)
-            })
-        this.axios.get(`ingredients/recipe/${this.recipe.id}`)
-            .then(i=>{
-                this.ingredients = i.data
-            })
-        this.axios.get(`yield/recipe/${this.recipe.id}`)
+        },
+        loadIngredientsList(){
+            this.axios.get(`ingredient_list/recipe/${this.recipe.id}`)
+                .then(response => {
+                    this.ingredient_list = response.data.map(ingredient_list => {
+                        return {
+                            ...ingredient_list, 
+                            key: `${ingredient_list.id}-${ingredient_list.pm_id}`,
+                            substitute_for_name: this.substitute_for_name(ingredient_list.substitute_for),
+                        }
+                    })
+                    console.log("🚀 ~ file: Recipe.vue ~ line 258 ~ created ~ this.ingredient_list", this.ingredient_list)
+                })
+        },
+        loadYieldType(){
+            this.axios.get(`yield/recipe/${this.recipe.id}`)
             .then(y=>{
                 this.yield_type = y.data[0]
             })
-            
-        this.axios.get(`author/recipe/${this.recipe.id}`)
+        
+        },
+        loadAuthor(){
+            this.axios.get(`author/recipe/${this.recipe.id}`)
             .then(y=>{
                 this.author = y.data[0]
             })
-
+        }
+    },
+    created(){
+        // Carrega as informações da receita
+        this.loadRecipe()
     }
 }
 </script>

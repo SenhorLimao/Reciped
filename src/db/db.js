@@ -1,7 +1,7 @@
-import Sequelize from 'sequelize'
+const {Sequelize, QueryTypes} = require('sequelize');
 const sequelize = new Sequelize({
     dialect: 'sqlite',
-    storage: './database.sqlite'
+    storage: './reciped.sqlite'
   })
 
 module.exports = sequelize;

@@ -7,7 +7,7 @@
 
                 <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
-                        <v-list-item :key="author.id" @click="$emit('showAuthor',author)" v-bind="attrs" v-on="on">
+                        <v-list-item :key="author.id" @click="showAuthor(author)" v-bind="attrs" v-on="on">
                             
                                 <v-list-item-avatar>
                                     <h2>{{author.id}}</h2>
@@ -99,6 +99,11 @@ export default {
             console.log(result)
             return result
         },
+        showAuthor(author){
+            if (this.hasRecipes(author)) {
+                this.$emit('showAuthor',author)
+            }
+        }
 
     },
     computed: {

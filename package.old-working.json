@@ -9,19 +9,13 @@
     "electron:build": "vue-cli-service electron:build",
     "electron:build-linux": "vue-cli-service electron:build -- --linux deb",
     "electron:serve": "vue-cli-service electron:serve",
-    "server:electron:serve": "start node indexServer.js && start vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps"
   },
   "main": "background.js",
   "dependencies": {
     "core-js": "^3.6.5",
-    "cors": "^2.8.5",
-    "electron-store": "^8.0.1",
-    "express": "^4.17.1",
-    "pg-hstore": "^2.3.4",
-    "sequelize": "^6.6.5",
-    "sqlite3": "^5.0.2",
+    "nedb": "^1.8.0",
     "vue": "^2.6.11",
     "vuetify": "^2.4.0",
     "vuex": "^3.4.0"
