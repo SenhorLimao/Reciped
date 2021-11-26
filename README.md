@@ -1,5 +1,5 @@
 # reciped
-
+### Frontend for https://github.com/SenhorLimao/Reciped-server
 ## Project setup
 ```
 npm install
