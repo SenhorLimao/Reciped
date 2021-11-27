@@ -1,4 +1,5 @@
 # reciped
+### Frontend for https://github.com/SenhorLimao/Reciped-server
 
 ## Project setup
 ```
@@ -7,12 +8,12 @@ npm install
 
 ### Compiles and hot-reloads for development
 ```
-npm run serve
+npm run electron:serve
 ```
 
 ### Compiles and minifies for production
 ```
-npm run build
+npm run electron:build
 ```
 
 ### Lints and fixes files
