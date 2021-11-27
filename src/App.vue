@@ -11,7 +11,7 @@
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
               <v-btn fab dark small color="primary"
-                @click="selected='new->recipe'"
+                @click="newRecipe"
                 v-bind="attrs" v-on="on">
                   <v-icon dark>mdi-plus</v-icon>
               </v-btn>
@@ -102,7 +102,7 @@
       <author v-else-if="selected==='author'" :author="author" @showRecipe="showRecipe($event)" />
       
       <!-- Mostra a tela de cadastro de nova receita -->
-      <recipe-stepper v-else-if="selected==='new->recipe'" :author="author" />
+      <recipe-stepper v-else-if="selected==='new->recipe'" />
     </v-main>
   </v-app>
 </template>
@@ -147,7 +147,16 @@ export default {
   methods: {
     // Chama a tela de cadastro de nova receita
     newRecipe(){
-      this.selected='newRecipe'
+      // this.$store.state.recipe = this.$store.state.recipe_default;
+      // this.$store.state.author = this.$store.state.author_default;
+      // this.$store.state.category = this.$store.state.category_default;
+      // this.$store.state.yield_type = this.$store.state.yield_type_default;
+      // this.$store.state.prep_method = this.$store.state.prep_method_default;
+      // this.$store.state.ingredient_list = this.$store.state.ingredient_list_default;
+
+      this.$store.commit('clearStore')
+      // this.selected='newRecipe'
+      this.selected='new->recipe'
     },
     // Chama a tela de índice de receitas
     showIndex(){

@@ -58,6 +58,8 @@ import RecipeStep2 from './recipesteps/RecipeStep2.vue'
 import RecipeStep3 from './recipesteps/RecipeStep3.vue'
 import RecipeStep4 from './recipesteps/RecipeStep4.vue'
 
+// TODO: limpar store ao iniciar a inserção de nova receita
+
 // Importação do mapeamento dos getters da store do vuex
 import { mapGetters } from 'vuex'
 // Importação do mixin de receitas

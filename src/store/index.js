@@ -133,7 +133,14 @@ export default new Vuex.Store({
       getIngredientListHeader:state=>state.ingredient_list_header,
       getStepperSteps:state=>state.stepper.steps,
       getStepperTitles:state=>state.stepper.titles,
-      getStepperActualStep:state=>state.stepper.e1
+      getStepperActualStep:state=>state.stepper.e1,
+      getRecipeDefault:state=>state.recipe_default,
+      getCategoryDefault:state=>state.category_default,
+      getAuthorDefault:state=>state.author_default,
+      getYieldTypeDefault:state=>state.yield_type_default,
+      getPrepMethodDefault:state=>state.prep_method_default,
+      getIngredientListDefault:state=>state.ingredient_list_default,
+
 
   },
   mutations: {
@@ -150,6 +157,15 @@ export default new Vuex.Store({
       setStepperTitles:(state,payload)=>state.stepper.titles=payload,
       setStepperActualStep:(state,payload)=>state.stepper.e1=payload,
 
+      clearStore:(state)=>{
+        console.error('clearStore')
+        state.recipe = state.recipe_default
+        state.category = state.category_default
+        state.author = state.author_default
+        state.yield_type = state.yield_type_default
+        state.prep_method = state.prep_method_default
+        state.ingredient_list = state.ingredient_list_default
+      }
   },
   actions: {
   },

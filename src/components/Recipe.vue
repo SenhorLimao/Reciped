@@ -90,7 +90,7 @@
                                 </template>
                                 <!-- Botão para excluir o item da lista de ingredientes -->
                                 <template v-slot:[`item.delete`]="{ item }">
-                                    <v-btn icon @click="remove(item)">
+                                    <v-btn icon @click="removeIngredientListItem(item)">
                                         <v-icon color="red lighten-1">mdi-close-outline</v-icon>
                                     </v-btn>
                                 </template>
@@ -105,6 +105,11 @@
                 :visible="editIngredientListItemDialog" 
                 @close="closeIngredientListItemDialog($event)"
                 :ingredientListItem="ingredientListItemEdit" />
+            <remove-ingredient-list-item-dialog
+                v-if="removeIngredientListItemDialog" 
+                :visible="removeIngredientListItemDialog" 
+                @close="closeRemoveIngredientListItemDialog($event)"
+                :ingredientListItem="ingredientListItemRemove" />
             <!-- Mostra as instruções de prepado da receita -->
             <v-row  justify="space-around" class="mt-4">
                 <v-card
@@ -145,8 +150,9 @@
 import EditIngredientList from './EditDialogs/EditIngredientList.vue'
 import RecipeMixin from '@/components/new/recipemixin.js'
 import EditIngredientListItemDialog from './EditDialogs/EditIngredientListItemDialog.vue'
+import RemoveIngredientListItemDialog from './EditDialogs/RemoveIngredientListItemDialog.vue'
 export default {
-  components: { EditIngredientList, EditIngredientListItemDialog },
+  components: { EditIngredientList, EditIngredientListItemDialog, RemoveIngredientListItemDialog },
     props: ['recipe'],
     mixins: [RecipeMixin],
     data() {
@@ -154,6 +160,9 @@ export default {
             editIngredientListDialog: false,
             editIngredientListItemDialog: false,
             ingredientListItemEdit: {},
+            removeIngredientListItemDialog: false,
+            ingredientListItemRemove: {},
+
             ingredients:[],
             // yield_type:null,
             // author:null,
@@ -231,10 +240,20 @@ export default {
             this.editIngredientListItemDialog=false
             this.loadIngredientsList()
         },
+        closeRemoveIngredientListItemDialog(event){
+            // this.loadUnits()
+            console.log(event)
+            this.removeIngredientListItemDialog=false
+            this.loadIngredientsList()
+        },
         editIngredientListItem(item){
             console.log(item)
             this.ingredientListItemEdit = item
             this.editIngredientListItemDialog=true
+        },
+        removeIngredientListItem(item){
+            this.ingredientListItemRemove = item
+            this.removeIngredientListItemDialog=true
         },
         loadRecipe(){
             this.loadIngredients()
