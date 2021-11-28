@@ -42,6 +42,15 @@ export default {
             // instructions:''
         }
     },
+    methods: {
+        clearFields(){
+            this.instructions = ''
+            this.prep_time = '00:00'
+        },
+    },
+    created() {
+        this.clearFields()
+    },
 }
 </script>
 

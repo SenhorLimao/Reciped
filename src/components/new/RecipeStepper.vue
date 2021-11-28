@@ -69,7 +69,8 @@ export default {
   components: { RecipeStep1, RecipeStep2, RecipeStep3, RecipeStep4 },
     data () {
       return {
-        
+        e1: 1,
+        steps: 4,
       }
     },
     watch: {
@@ -88,8 +89,6 @@ export default {
         let recipeNotFilled = !(!!this.getRecipe.title &&
                  !!this.getRecipe.prep_time &&
                  !!this.getRecipe.instructions)
-                //  !!this.getRecipe.yield_amount &&
-                //  !!this.getRecipe.yield_type_id &&
         
         // Verifica se a lista de ingredientes foi preenchida
         let ingredientListNotFilled = this.getIngredientList.length == 0
@@ -137,6 +136,9 @@ export default {
       }
     },
     created() {
+    },
+    mounted() {
+      this.e1 = 1
     },
   }
 </script>

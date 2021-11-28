@@ -187,9 +187,17 @@ export default {
                         return {text:cl.name, value:cl.id, ...cl}
                     })
                 })
-        }
+        },
+        clearFields(){
+            this.title=null
+            this.yield_amount=null
+            this.yield_type=null
+            this.author=null
+            this.category=null
+        },
     },
     created() {
+        this.clearFields()
         this.loadAuthors()
         this.loadYieldTypes()
         this.loadCategories()

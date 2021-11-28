@@ -380,6 +380,18 @@ export default {
             this.operation='add'
         },
 
+        clearFields(){
+            this.ingredient_list = []
+            this.ingredient_list_position = 0
+            this.ingredient_list_tmp = null
+            this.ingredient = null
+            this.prep_method = null
+            this.substitute_for = null
+            this.unit = null
+            this.ingredient_group = null
+            this.amount = 0
+        },
+
         // Popula a lista de ingredientes com os dados do banco de dados, relizando
         // inserindo os dados na lista de ingredientes
         populateIfEditingRecipe(){
@@ -425,6 +437,11 @@ export default {
         }
     },
     created() {
+        // this.substitute_for =
+
+    },
+    mounted(){
+        this.clearFields()
         // Ao carregar o componente, carrega as variáveis com os dados dos seletores correspondentes
         this.loadIngredientGroups()
         this.loadIngredients()
@@ -433,8 +450,6 @@ export default {
         if (this.ingredient_list.length>0){
             this.populateIfEditingRecipe()
         }
-        // this.substitute_for =
-
     },
     computed:{
         // Variável computada com a lista de ingredientes, para o seletor de ingrediente substituto

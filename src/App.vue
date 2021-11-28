@@ -1,110 +1,103 @@
 <template>
-  <v-app class="dark">
-    <v-app-bar
-      app
-      color="blue-grey darken-4"
-      dark
-    >
-    <!-- Botão para adicionar nova receita -->
-      <v-row align-center>
-        <div class="d-flex align-center">
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn fab dark small color="primary"
-                @click="newRecipe"
-                v-bind="attrs" v-on="on">
-                  <v-icon dark>mdi-plus</v-icon>
-              </v-btn>
-            </template>
-            <span>Nova Receita</span>
-          </v-tooltip>
-        </div>
-        <v-spacer></v-spacer>
-        
-        <!-- Botão para mostrar o índice de receitas -->
-        <div class="d-flex align-center">
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn fab dark small color="primary"
-                  @click="showIndex"
+    <v-app class="dark">
+      <v-app-bar
+        app
+        color="blue-grey darken-4"
+        dark
+      >
+        <v-row>
+      <!-- Botão para adicionar nova receita -->
+          <div class="d-flex align-center">
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn fab dark small color="primary"
+                  @click="newRecipe"
                   v-bind="attrs" v-on="on">
-                <v-icon dark>mdi-format-list-bulleted-type</v-icon>
-              </v-btn>
-            </template>
-            <span>Mostrar Índice</span>
-          </v-tooltip>
-        </div>
-        <v-spacer></v-spacer>
-
-        <!-- Botão para mostrar a lista de autores -->
-        <div class="d-flex align-center">
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn fab dark small color="primary"
-                  @click="showAuthors"
-                  v-bind="attrs" v-on="on">
-                <v-icon dark>mdi-account-details</v-icon>
-              </v-btn>
-            </template>
-            <span>Listar Autores</span>
-          </v-tooltip>
-        </div>
-        <v-spacer></v-spacer>
-
-        <!-- Campo de busca por nome da receita ou autor -->
-        <div class="d-flex align-end">
-          <v-text-field
-            dense
-            filled
-            rounded
-            solo
-            style="margin-bottom: -25px"
-            prepend-inner-icon="mdi-magnify"
-            color="primary"
-            v-model="searchFieldRecipesAndAuthors"
-            @keyup="searchRecipesAndAuthors"
-          ></v-text-field>
-
-          <!-- Lista de resultados da busca do campo acima -->
-          <div v-if="searching" class="searchResults">
-            <ul v-if="authorsSearch.length>0">
-              <em>Autores:</em>
-              <li v-for="aS in authorsSearch" :key="aS.id"
-                @click="searchFieldRecipesAndAuthors='';showAuthor(aS)">{{aS.name}}</li>
-            </ul>
-            <ul v-if="recipesSearch.length>0">
-              <em>Receitas:</em>
-              <li v-for="rS in recipesSearch" :key="rS.id"
-                @click="searchFieldRecipesAndAuthors='';showRecipe(rS)">{{rS.title}}</li>
-            </ul>
+                    <v-icon dark>mdi-plus</v-icon>
+                </v-btn>
+              </template>
+              <span>Nova Receita</span>
+            </v-tooltip>
           </div>
-        </div>
-      </v-row>
-    </v-app-bar>
-
-    <!-- Painel principal -->
-    <v-main class="dark">
-      <!-- Mostra uma receita caso a tela selecionada seja uma receita.
-      Caso receba um evento de showAuthor, chama a função para mostrar a 
-      lista de receitas do autor -->
-      <Recipe v-if="selected==='recipe'" :recipe="recipe" @showAuthor="showAuthor($event)" />
-
-      <!-- Mostra o índice de receitas caso a tela selecionada seja o índice -->
-      <index v-else-if="selected==='index'" @showRecipe="showRecipe($event)" />
-
-      <!-- Mostra a lista de autores caso a tela selecionada seja a lista de autores
-      Caso receba um evento de showAuthor, chama a função para mostrar a 
-      lista de receitas do autor -->
-      <author-list v-else-if="selected==='authors'" @showAuthor="showAuthor($event)" />
-
-      <!-- Mostra a lista de receitas de um autor. Caso receba um evento de showRecipe,
-      chama a função para mostrar a receita. -->
-      <author v-else-if="selected==='author'" :author="author" @showRecipe="showRecipe($event)" />
-      
-      <!-- Mostra a tela de cadastro de nova receita -->
-      <recipe-stepper v-else-if="selected==='new->recipe'" />
-    </v-main>
-  </v-app>
+          <v-spacer></v-spacer>
+    
+          <!-- Botão para mostrar o índice de receitas -->
+          <div class="d-flex align-center">
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn fab dark small color="primary"
+                    @click="showIndex"
+                    v-bind="attrs" v-on="on">
+                  <v-icon dark>mdi-format-list-bulleted-type</v-icon>
+                </v-btn>
+              </template>
+              <span>Mostrar Índice</span>
+            </v-tooltip>
+          </div>
+          <v-spacer></v-spacer>
+          <!-- Botão para mostrar a lista de autores -->
+          <div class="d-flex align-center">
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn fab dark small color="primary"
+                    @click="showAuthors"
+                    v-bind="attrs" v-on="on">
+                  <v-icon dark>mdi-account-details</v-icon>
+                </v-btn>
+              </template>
+              <span>Listar Autores</span>
+            </v-tooltip>
+          </div>
+          <v-spacer></v-spacer>
+          <!-- Campo de busca por nome da receita ou autor -->
+          <div class="d-flex align-end">
+            <v-text-field
+              dense
+              filled
+              rounded
+              solo
+              style="margin-bottom: -25px"
+              prepend-inner-icon="mdi-magnify"
+              color="primary"
+              v-model="searchFieldRecipesAndAuthors"
+              @keyup="searchRecipesAndAuthors"
+            ></v-text-field>
+            <!-- Lista de resultados da busca do campo acima -->
+            <div v-if="searching" class="searchResults">
+              <ul v-if="authorsSearch.length>0">
+                <em>Autores:</em>
+                <li v-for="aS in authorsSearch" :key="aS.id"
+                  @click="searchFieldRecipesAndAuthors='';showAuthor(aS)">{{aS.name}}</li>
+              </ul>
+              <ul v-if="recipesSearch.length>0">
+                <em>Receitas:</em>
+                <li v-for="rS in recipesSearch" :key="rS.id"
+                  @click="searchFieldRecipesAndAuthors='';showRecipe(rS)">{{rS.title}}</li>
+              </ul>
+            </div>
+          </div>
+        </v-row>
+      </v-app-bar>
+      <!-- Painel principal -->
+      <v-main class="dark">
+        <!-- Mostra uma receita caso a tela selecionada seja uma receita.
+        Caso receba um evento de showAuthor, chama a função para mostrar a
+        lista de receitas do autor -->
+        <Recipe v-if="selected==='recipe'" :recipe="recipe" @showAuthor="showAuthor($event)" />
+        <!-- Mostra o índice de receitas caso a tela selecionada seja o índice -->
+        <index v-else-if="selected==='index'" @showRecipe="showRecipe($event)" />
+        <!-- Mostra a lista de autores caso a tela selecionada seja a lista de autores
+        Caso receba um evento de showAuthor, chama a função para mostrar a
+        lista de receitas do autor -->
+        <author-list v-else-if="selected==='authors'" @showAuthor="showAuthor($event)" />
+        <!-- Mostra a lista de receitas de um autor. Caso receba um evento de showRecipe,
+        chama a função para mostrar a receita. -->
+        <author v-else-if="selected==='author'" :author="author" @showRecipe="showRecipe($event)" />
+    
+        <!-- Mostra a tela de cadastro de nova receita -->
+        <recipe-stepper v-else-if="selected==='new->recipe'" />
+      </v-main>
+    </v-app>
 </template>
 
 <script>

@@ -24,7 +24,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          // Cancela o diálogo
+          <!-- Cancela o diálogo -->
           <v-btn
             color="blue darken-1"
             outlined
