@@ -23,7 +23,7 @@
                 >
                     <v-card-text class="d-flex justify-space-between">
                         <span class="clickable" @click="$emit('showAuthor',author)"><strong>Autor:</strong> {{author.name | uppercase}}</span>
-                        <v-btn color="primary" x-small fab @click="editAuthorDialog(author)">
+                        <v-btn color="primary" x-small fab @click="editAuthorDialog()">
                             <v-icon dense>mdi-pencil</v-icon>
                         </v-btn>
                     </v-card-text>
@@ -118,14 +118,21 @@
                     dark
                     width="60vw"
                 >
-                    <v-card-title primary-title>
-                        Modo de Preparo
+                    <v-card-title primary-title  class="d-flex justify-space-between">
+                        <span><strong>Modo de Preparo</strong></span>
+                        <v-btn color="primary" x-small fab @click="editInstructionsDialog()">
+                            <v-icon dense>mdi-pencil</v-icon>
+                        </v-btn>
                     </v-card-title>
                     <v-card-text>
                         {{recipe.instructions}}
                     </v-card-text>
                 </v-card>
             </v-row>
+            <edit-instructions-dialog 
+                :visible="instructionsDialog" 
+                @close="closeEditInstructionsDialog($event)" 
+                :recipe="recipe" />
             <!-- Mostra o rednmento da receita, se este tiver sido especificado -->
             <v-row v-if="yield_type" justify="space-around" class="mt-4">
                 <v-card
@@ -151,14 +158,22 @@ import EditIngredientList from './EditDialogs/EditIngredientList.vue'
 import RecipeMixin from '@/components/new/recipemixin.js'
 import EditIngredientListItemDialog from './EditDialogs/EditIngredientListItemDialog.vue'
 import RemoveIngredientListItemDialog from './EditDialogs/RemoveIngredientListItemDialog.vue'
+import EditInstructionsDialog from './EditDialogs/EditInstructionsDialog.vue'
 export default {
-  components: { EditIngredientList, EditIngredientListItemDialog, RemoveIngredientListItemDialog },
+  components: { 
+      EditIngredientList, 
+      EditIngredientListItemDialog, 
+      RemoveIngredientListItemDialog, 
+      EditInstructionsDialog 
+    },
     props: ['recipe'],
     mixins: [RecipeMixin],
     data() {
         return {
             editIngredientListDialog: false,
             editIngredientListItemDialog: false,
+            authorDialog: false,
+            instructionsDialog: false,
             ingredientListItemEdit: {},
             removeIngredientListItemDialog: false,
             ingredientListItemRemove: {},
@@ -238,6 +253,7 @@ export default {
             // this.loadUnits()
             console.log(event)
             this.editIngredientListItemDialog=false
+            this.
             this.loadIngredientsList()
         },
         closeRemoveIngredientListItemDialog(event){
@@ -245,6 +261,13 @@ export default {
             console.log(event)
             this.removeIngredientListItemDialog=false
             this.loadIngredientsList()
+        },
+        closeEditInstructionsDialog(event){
+            // this.loadUnits()
+            console.log(event)
+            this.recipe.instructions = event.instructions
+            this.recipe.prep_time = event.prep_time
+            this.instructionsDialog=false
         },
         editIngredientListItem(item){
             console.log(item)
@@ -292,7 +315,14 @@ export default {
             .then(y=>{
                 this.author = y.data[0]
             })
-        }
+        },
+
+        editAuthorDialog(){
+            this.authorDialog=true
+        },
+        editInstructionsDialog(){
+            this.instructionsDialog=true
+        },
     },
     created(){
         // Carrega as informações da receita
