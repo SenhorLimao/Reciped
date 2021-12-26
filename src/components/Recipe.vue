@@ -3,11 +3,13 @@
         <div>
             <!-- Título da receita -->
             <v-row justify="space-around" class="mt-4">
-                <v-card class="grey lighten-2">
+                <v-card class="grey">
                     <v-card-title primary-title class="d-flex justify-space-between">
-                        {{recipe.title | uppercase}}
-                        
+                        <h1>{{recipe.title | uppercase}}</h1>
                     </v-card-title>
+                    <v-card-text>
+                        <h2>{{category.name}}</h2>
+                    </v-card-text>
                 </v-card>
             </v-row>
             <!-- Nome do autor da receita.
@@ -23,13 +25,19 @@
                 >
                     <v-card-text class="d-flex justify-space-between">
                         <span class="clickable" @click="$emit('showAuthor',author)"><strong>Autor:</strong> {{author.name | uppercase}}</span>
-                        <v-btn color="primary" x-small fab @click="editAuthorDialog()">
+                        <v-btn color="primary" x-small fab @click="editRecipeAuthorDialog()">
                             <v-icon dense>mdi-pencil</v-icon>
                         </v-btn>
                     </v-card-text>
 
                 </v-card>
             </v-row>
+            <edit-recipe-author-dialog
+                :visible="recipeAuthorDialog" 
+                @close="closeEditRecipeAuthorDialog($event)" 
+                :recipe="recipe"
+                :author="author" />
+
             <!-- Mostra a lista de ingredientes da receita -->
             <!-- TODO: alterar para mostrar a ingredient_list, com os parâmetros, ao invés de somente os
             ingredientes utilizados -->
@@ -125,7 +133,10 @@
                         </v-btn>
                     </v-card-title>
                     <v-card-text>
-                        {{recipe.instructions}}
+                        <div>{{recipe.instructions}}</div>
+                        <div>
+                            <h3><strong>Tempo de preparo: </strong>{{recipe.prep_time}}</h3>
+                        </div>
                     </v-card-text>
                 </v-card>
             </v-row>
@@ -159,12 +170,14 @@ import RecipeMixin from '@/components/new/recipemixin.js'
 import EditIngredientListItemDialog from './EditDialogs/EditIngredientListItemDialog.vue'
 import RemoveIngredientListItemDialog from './EditDialogs/RemoveIngredientListItemDialog.vue'
 import EditInstructionsDialog from './EditDialogs/EditInstructionsDialog.vue'
+import EditRecipeAuthorDialog from './EditDialogs/EditRecipeAuthorDialog.vue'
 export default {
   components: { 
       EditIngredientList, 
       EditIngredientListItemDialog, 
       RemoveIngredientListItemDialog, 
-      EditInstructionsDialog 
+      EditInstructionsDialog,
+      EditRecipeAuthorDialog 
     },
     props: ['recipe'],
     mixins: [RecipeMixin],
@@ -172,7 +185,7 @@ export default {
         return {
             editIngredientListDialog: false,
             editIngredientListItemDialog: false,
-            authorDialog: false,
+            recipeAuthorDialog: false,
             instructionsDialog: false,
             ingredientListItemEdit: {},
             removeIngredientListItemDialog: false,
@@ -235,8 +248,11 @@ export default {
         }
     },
     computed: {
+
     },
     methods: {
+        // TODO: ao fechar os diálogos com cancelamento, a receita deve retornar ao estado anterior.
+        // TODO: provável necessidade de definir o evento de fechamento como o estado original.
         substitute_for_name(id){
             let substitute = this.ingredients.find(ingredient => ingredient.id == id)
             return substitute?substitute.name?substitute.name:'':''
@@ -269,6 +285,13 @@ export default {
             this.recipe.prep_time = event.prep_time
             this.instructionsDialog=false
         },
+        closeEditRecipeAuthorDialog(event){
+            // this.loadUnits()
+            console.log(event)
+            console.log("🚀 ~ file: Recipe.vue ~ line 289 ~ closeEditRecipeAuthorDialog ~ event", event)
+            this.author = event
+            this.recipeAuthorDialog=false
+        },
         editIngredientListItem(item){
             console.log(item)
             this.ingredientListItemEdit = item
@@ -283,6 +306,7 @@ export default {
             this.loadIngredientsList()
             this.loadYieldType()
             this.loadAuthor()
+            this.loadCategory()
         },
         loadIngredients(){
             this.axios.get(`ingredients/recipe/${this.recipe.id}`)
@@ -310,6 +334,12 @@ export default {
             })
         
         },
+        loadCategory(){
+            this.axios.get(`category/recipe/${this.recipe.id}`)
+            .then(c=>{
+                this.category = c.data[0]
+            })
+        },
         loadAuthor(){
             this.axios.get(`author/recipe/${this.recipe.id}`)
             .then(y=>{
@@ -317,8 +347,8 @@ export default {
             })
         },
 
-        editAuthorDialog(){
-            this.authorDialog=true
+        editRecipeAuthorDialog(){
+            this.recipeAuthorDialog=true
         },
         editInstructionsDialog(){
             this.instructionsDialog=true

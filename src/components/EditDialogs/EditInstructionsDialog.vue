@@ -9,22 +9,24 @@
             <v-row>
 
                 <!-- Campo de texto com as instruções a serem alteradas -->
-                <v-col cols="9">
+                <!-- <v-col cols="9"> -->
                     <v-textarea 
                         outlined 
                         name="input-7-4" 
                         label="Modo de Preparo" 
-                        v-model="instructions">
+                        v-model="instructions"
+                        >
                     </v-textarea>
-                </v-col>
-
-                <v-col cols="3">
+                <!-- </v-col> -->
+            </v-row>
+            <v-row>
+                <!-- <v-col cols="3"> -->
                     <v-text-field 
                         label="Tempo de Preparo" 
                         type="time" 
                         v-model="prep_time">
                     </v-text-field>
-                </v-col>
+                <!-- </v-col> -->
             </v-row>
                   
           </v-container>
@@ -36,7 +38,7 @@
           <v-btn
             color="blue darken-1"
             outlined
-            @click.stop="show = false"
+            @click.stop="cancelAndClose"
           >
             Cancelar
           </v-btn>
@@ -77,9 +79,18 @@
         this.instructions = this.recipe.instructions
         this.prep_time = this.recipe.prep_time
     },
+    mounted(){
+        this.instructions = this.recipe.instructions
+        this.prep_time = this.recipe.prep_time
+    },
     methods: {
         clear(){
             this.name=''
+        },
+        cancelAndClose(){
+          console.log(this.recipe)
+            this.$emit('close', {instructions: this.recipe.instructions, prep_time: this.recipe.prep_time})
+            // this.show = false
         },
         // Cria um novo autor e fecha o diálogo
         saveAndClose(){
