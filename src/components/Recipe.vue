@@ -152,14 +152,23 @@
                     dark
                     width="60vw"
                 >
-                    <v-card-title primary-title>
-                        Rendimento
+                    <v-card-title primary-title  class="d-flex justify-space-between">
+                        <span><strong>Rendimento</strong></span>
+                        <v-btn color="primary" x-small fab @click="editYieldDialog()">
+                            <v-icon dense>mdi-pencil</v-icon>
+                        </v-btn>
                     </v-card-title>
                     <v-card-text>
                         {{yield_type.yield_amount}} {{yield_type.name}}
                     </v-card-text>
                 </v-card>
             </v-row>
+            <edit-yield-dialog 
+                :visible="yieldDialog" 
+                @close="closeEditYieldDialog($event)" 
+                :recipe="recipe"
+                :yield_amount="yield_type.yield_amount"
+                :yield_type="yield_type" />
         </div>
     </v-container>
 </template>
@@ -171,13 +180,15 @@ import EditIngredientListItemDialog from './EditDialogs/EditIngredientListItemDi
 import RemoveIngredientListItemDialog from './EditDialogs/RemoveIngredientListItemDialog.vue'
 import EditInstructionsDialog from './EditDialogs/EditInstructionsDialog.vue'
 import EditRecipeAuthorDialog from './EditDialogs/EditRecipeAuthorDialog.vue'
+import EditYieldDialog from './EditDialogs/EditYieldDialog.vue'
 export default {
   components: { 
       EditIngredientList, 
       EditIngredientListItemDialog, 
       RemoveIngredientListItemDialog, 
       EditInstructionsDialog,
-      EditRecipeAuthorDialog 
+      EditRecipeAuthorDialog,
+      EditYieldDialog 
     },
     props: ['recipe'],
     mixins: [RecipeMixin],
@@ -187,6 +198,7 @@ export default {
             editIngredientListItemDialog: false,
             recipeAuthorDialog: false,
             instructionsDialog: false,
+            yieldDialog: false,
             ingredientListItemEdit: {},
             removeIngredientListItemDialog: false,
             ingredientListItemRemove: {},
@@ -269,8 +281,11 @@ export default {
             // this.loadUnits()
             console.log(event)
             this.editIngredientListItemDialog=false
-            this.
             this.loadIngredientsList()
+        },
+        closeEditYieldDialog(event){
+            console.log(event)
+            this.yieldDialog=false
         },
         closeRemoveIngredientListItemDialog(event){
             // this.loadUnits()
@@ -352,6 +367,9 @@ export default {
         },
         editInstructionsDialog(){
             this.instructionsDialog=true
+        },
+        editYieldDialog(){
+            this.yieldDialog=true
         },
     },
     created(){

@@ -3,14 +3,14 @@
       <v-list dark three-line class="list">
           <template v-if="loaded">
               <!-- <v-divider v-else-if="item.divider" :inset="item.inset" :key="index"></v-divider> -->
-              <div  v-for="author in authors" :key="author.author_id">
+              <div  v-for="author in authors" :key="author.id">
 
                 <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
-                        <v-list-item :key="author.author_id" @click="showAuthor(author)" v-bind="attrs" v-on="on">
+                        <v-list-item :key="author.id" @click="showAuthor(author)" v-bind="attrs" v-on="on">
                             
                                 <v-list-item-avatar>
-                                    <h2>{{author.author_id}}</h2>
+                                    <h2>{{author.id}}</h2>
                                 </v-list-item-avatar>
                                 <v-list-item-content>
                                     <v-list-item-title>{{author.name|uppercase}}</v-list-item-title>
@@ -24,7 +24,7 @@
                             <li v-for="recipe in author.recipes" :key="recipe.id">{{recipe.title}}</li>
                         </ul> -->
                         <div v-if="hasRecipes(author)">
-                                <div v-for="(recipe,index) in author.recipes" :key="recipe.recipe_id" >
+                                <div v-for="(recipe,index) in author.recipes" :key="recipe.id" >
                                     {{index+1}}. {{recipe.title}}
                                 </div>
                         </div>
@@ -60,41 +60,28 @@ export default {
 
 
         this.loaded = false
-        this.axios.get('authors/recipes')
-            .then(response => {
-                this.authors = response.data
-                console.log(this.authors)
-            })
-            .then(()=>{
-                this.loaded = true
-            })
-            .catch(error => {
-                console.log(error)
-            })
-
-
-        // this.axios.get('authors')
-        //     .then((result) => {
-        //         this.authors = result.data
-        //         this.authors.forEach(author=>{
-        //             Object.assign(author,{recipes:[]})
-        //             this.axios.get(`recipes/author/${author.id}`)
-        //                 .then((res) => {
-        //                     author.recipes = res.data
-        //                 })
-        //                 .catch((err) => {
-        //                     console.error(err)
-        //                 })
+        this.axios.get('authors')
+            .then((result) => {
+                this.authors = result.data
+                this.authors.forEach(author=>{
+                    Object.assign(author,{recipes:[]})
+                    this.axios.get(`recipes/author/${author.id}`)
+                        .then((res) => {
+                            author.recipes = res.data
+                        })
+                        .catch((err) => {
+                            console.error(err)
+                        })
                         
-        //         })
-        //         // this.loaded = true
-        //     }).then(()=>{
-        //         // setTimeout(()=>{
-        //         this.loaded = true
-        //         // },500)
-        //     }).catch((err) => {
-        //         console.warn(err)
-        //     })
+                })
+                // this.loaded = true
+            }).then(()=>{
+                // setTimeout(()=>{
+                this.loaded = true
+                // },500)
+            }).catch((err) => {
+                console.warn(err)
+            })
         // this.axios.get('recipes')
         //     .then((result) => {
         //         this.recipes = result.data
@@ -128,7 +115,7 @@ export default {
         },
         showAuthor(author){
             if (this.hasRecipes(author)) {
-                this.$emit('showAuthor',{id:author.author_id, ...author})
+                this.$emit('showAuthor',author)
             }
         }
 
